@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "platform": "linux-x86_64",
+  "dependencies": {
+    "mujoco": {
+      "version": "3.5.0",
+      "url": "https://github.com/google-deepmind/mujoco/releases/download/3.5.0/mujoco-3.5.0-linux-x86_64.tar.gz",
+      "archive_sha256": "df110ae7b9b0d2e991e0594da4136e9077a625e237f84e7c338410d5199193c7",
+      "license": "Apache-2.0"
+    },
+    "onnxruntime": {
+      "version": "1.20.0",
+      "variant": "cpu",
+      "url": "https://github.com/microsoft/onnxruntime/releases/download/v1.20.0/onnxruntime-linux-x64-1.20.0.tgz",
+      "archive_sha256": "aa70d48b22e264b82e83f63245b51ddc9a47ae4a3a66903efaff1ba68b7b5930",
+      "license": "MIT"
+    }
+  }
+}
