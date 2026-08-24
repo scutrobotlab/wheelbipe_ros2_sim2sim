@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>template_ros2_controller</name>
+  <version>0.1.0</version>
+  <description>WheelBipe ROS 2 controller with ONNX Runtime policy inference.</description>
+  <maintainer email="2231625449@qq.com">SCUTRobotLab</maintainer>
+  <license>MIT</license>
+  <url type="website">https://www.scutbot.cn/</url>
+  <author>SCUTRobotLab</author>
+
+  <buildtool_depend>ament_cmake_auto</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>ament_index_cpp</depend>
+  <depend>pluginlib</depend>
+  <depend>hardware_interface</depend>
+  <depend>controller_interface</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>generate_parameter_library</depend>
+  <depend>eigen</depend>
+  <depend>eigen3_cmake_module</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+    <controller_interface plugin="${prefix}/template_ros2_controller_plugin.xml"/>
+  </export>
+</package>

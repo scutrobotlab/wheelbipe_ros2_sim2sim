@@ -1,0 +1,10 @@
+<library path="template_ros2_controller">
+  <class
+    name="robot_locomotion/TemplateRos2Controller"
+    type="robot_locomotion::TemplateRos2Controller"
+    base_class_type="controller_interface::ControllerInterface">
+    <description>
+      WheelBipe finite-state controller with fixed 35D normal-only ONNX policy inference.
+    </description>
+  </class>
+</library>
