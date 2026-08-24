@@ -1,0 +1,77 @@
+name: Bug report
+description: 报告可复现的软件、仿真或操作问题
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。若问题包含可直接利用的安全漏洞细节，请使用 GitHub 私密漏洞报告；其他软件、仿真或硬件适配问题可在此公开提交。仓库精简与保密无关。
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: 问题范围
+      options:
+        - MuJoCo / ros2_control
+        - Controller / ONNX policy
+        - Keyboard
+        - Xbox
+        - RealBridge / Serial / DT7
+        - Build / dependency
+        - Documentation
+    validations:
+      required: true
+
+  - type: input
+    id: revision
+    attributes:
+      label: Git revision
+      description: 请填写 `git rev-parse HEAD` 的输出；若工作树有修改也请说明。
+      placeholder: 40-character commit SHA
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境
+      description: OS、ROS 2、CPU 架构、MuJoCo/ONNX Runtime 版本，以及是否使用真实 Xbox 或硬件。
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 最小复现步骤
+      description: 从仓库根目录开始，给出完整命令和所有非默认参数。
+      placeholder: |
+        1. ./scripts/bootstrap.sh
+        2. ./scripts/build.sh
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为与日志
+      description: 粘贴最小相关日志；请删除用户名、设备标识、凭据和私有路径。
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我已搜索现有 issue，并确认没有相同报告。
+          required: true
+        - label: 该报告不包含漏洞利用细节、凭据或个人数据。
+          required: true

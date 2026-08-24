@@ -1,0 +1,2 @@
+# WheelBipe V14 H7 lower-board serial bridge.
+SUBSYSTEM=="tty", ENV{ID_VENDOR_ID}=="1a86", ENV{ID_MODEL_ID}=="55d3", ENV{ID_SERIAL_SHORT}=="5C84391944", SYMLINK+="wheelbipe_h7", GROUP="dialout", MODE="0660"

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/SCUTRobotLab/wheelbipe_ros2_sim2sim/security/advisories/new
+    about: 仅在需要提交可直接利用的漏洞细节时使用 GitHub 私密漏洞报告。

@@ -1,0 +1,2 @@
+# Grant the active desktop user access to joystick-class evdev devices.
+SUBSYSTEM=="input", KERNEL=="event*", ENV{ID_INPUT_JOYSTICK}=="1", GROUP="input", MODE="0660", TAG+="uaccess"
