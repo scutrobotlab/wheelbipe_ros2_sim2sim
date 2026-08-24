@@ -1,0 +1,40 @@
+# ROS 2 Control configuration for the V14_2 MuJoCo baseline.
+
+/**:
+  controller_manager:
+    ros__parameters:
+      update_rate: 500 # Hz
+
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+      template_ros2_controller:
+        type: robot_locomotion/TemplateRos2Controller
+
+  joint_state_broadcaster:
+    ros__parameters:
+      update_rate: 500 # Hz
+
+  template_ros2_controller:
+    ros__parameters:
+      update_rate: 500 # Hz
+      joints:
+        - left_front1_joint
+        - left_rear1_joint
+        - right_front1_joint
+        - right_rear1_joint
+        - left_wheel_joint
+        - right_wheel_joint
+        - left_spring2_joint
+        - right_spring2_joint
+      command_interfaces:
+        - position
+        - velocity
+        - effort
+        - kp
+        - kd
+      state_interfaces:
+        - position
+        - velocity
+        - effort
+      sensors:
+        - imu

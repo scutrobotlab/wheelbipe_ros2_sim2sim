@@ -1,0 +1,34 @@
+/**:
+  ros__parameters:
+    # 控制模式：0=步进模式（每次按键增加/减少固定值），1=连续模式（按键持续按下时按速率变化，松开时恢复到0）
+    control_mode: 0 # 控制模式：0 或 1
+
+    # 速度步进值（模式0使用）
+    lin_vel_x_step: 0.5      # x方向线速度步进值 (m/s)
+    ang_vel_z_step: 1.0      # z方向角速度步进值 (rad/s)
+    height_step: 0.01         # 高度步进值 (m)
+
+    # 速度限制
+    max_lin_vel_x: 2.5       # 最大x方向线速度 (m/s)
+    max_ang_vel_z: 3.0        # 最大z方向角速度 (rad/s)
+
+    # 高度限制
+    min_height: 0.20 # 最小高度 (m)
+    max_height: 0.40 # 最大高度 (m)
+    default_height: 0.22 # 初始默认高度 (m)
+
+    # 连续模式子选项（模式1使用）
+    use_rate_in_continuous_mode: false # true=使用速率变化（按下时按速率增长，松开时按速率归零），false=立即最大速度（按下即最大速度，松开即归零）
+
+    # 速度变化速率（模式1且use_rate_in_continuous_mode=true时使用，单位：每秒的变化量）
+    lin_vel_x_rate: 2.0       # x方向线速度变化速率 (m/s per second)
+    ang_vel_z_rate: 2.0       # z方向角速度变化速率 (rad/s per second)
+
+    # 命名空间前缀，需与 bringup 的 prefix 一致。
+    prefix: "wheelbipe_V14"
+
+    # 话题名称
+    motion_command_topic: "motion_command" # 运动指令话题 (geometry_msgs/Twist)
+    height_command_topic: "height_command" # 高度指令话题 (std_msgs/Float64)
+    state_command_topic: "state_command"       # 状态机切换话题 (0=INIT, 1=IDLE, 2=PREPARE, 3=RL)
+    current_state_topic: "current_state"       # 当前状态话题（订阅控制器发布，用于终端显示）

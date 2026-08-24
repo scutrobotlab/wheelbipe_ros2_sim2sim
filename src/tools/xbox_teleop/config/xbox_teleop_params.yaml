@@ -1,0 +1,53 @@
+/**:
+  ros__parameters:
+    # Empty means auto-discover the first /dev/input/event* whose EVIOCGNAME
+    # contains device_name_hint. Set a stable /dev/input/by-id/... path when possible.
+    device_path: ""
+    device_name_hint: "Xbox"
+    grab_device: false
+
+    # Robot namespace and command topics.
+    prefix: "wheelbipe_V14"
+
+    motion_command_topic: "motion_command"
+    height_command_topic: "height_command"
+    state_command_topic: "state_command"
+    current_state_topic: "current_state"
+
+    publish_rate_hz: 50.0
+    device_retry_period_ms: 1000
+    display_status: true
+    clear_status_screen: true
+    status_rate_hz: 5.0
+    print_raw_events: false
+
+    # Xbox Series S|X evdev codes used by this node.
+    button_start_code: 315
+    button_record_code: 167
+
+    axis_left_y_code: 1
+    axis_right_x_code: 3
+    axis_left_trigger_code: 2
+    axis_right_trigger_code: 5
+
+    stick_deadzone: 3000
+    axis_abs_max: 32767.0
+    trigger_abs_max: 1023.0
+    trigger_deadzone: 2.0
+
+    # Left stick forward is negative on this controller, so sign -1 makes
+    # forward command positive. Right stick yaw is flipped here to match the
+    # robot angular velocity convention.
+    linear_x_axis_sign: -1.0
+    angular_z_axis_sign: -1.0
+    max_linear_x: 2.5
+    max_angular_z: 3.0
+
+    min_height: 0.20
+    max_height: 0.40
+    default_height: 0.22
+    height_down_rate: 0.2
+    height_up_rate: 0.2
+
+    idle_state_id: 1
+    rl_state_id: 3
