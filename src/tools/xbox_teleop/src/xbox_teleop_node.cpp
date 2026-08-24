@@ -351,7 +351,9 @@ class XboxTeleopNode : public rclcpp::Node {
         continue;
       }
       char device_name[256]{};
-      if (ioctl(fd, EVIOCGNAME(sizeof(device_name)), device_name) == 0) {
+      // EVIOCGNAME returns the copied name length on success, not necessarily zero.
+      const int name_length = ioctl(fd, EVIOCGNAME(sizeof(device_name)), device_name);
+      if (name_length >= 0) {
         const std::string lowered_name = lowerCopy(device_name);
         const bool matches_hint = hint.empty() || lowered_name.find(hint) != std::string::npos;
         if (matches_hint) {
