@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<?xml-model
+  href="http://download.ros.org/schema/package_format3.xsd"
+  schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>mujoco_ros2_control</name>
+  <version>0.1.0</version>
+  <description>MuJoCo hardware adapter for the WheelBipe ros2_control stack.</description>
+
+  <maintainer email="2231625449@qq.com">SCUTRobotLab</maintainer>
+
+  <license>MIT</license>
+  <url type="website">https://www.scutbot.cn/</url>
+
+  <author>SCUTRobotLab</author>
+  <author>Sangtaek Lee</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>hardware_interface</depend>
+  <depend>controller_manager</depend>
+  <depend>joint_limits</depend>
+  <depend>pluginlib</depend>
+  <depend>urdf</depend>
+  <depend>libglfw3-dev</depend>
+  <depend>eigen</depend>
+  <depend>eigen3_cmake_module</depend>
+  <depend>control_toolbox</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>rosgraph_msgs</depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>robot_descriptions</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

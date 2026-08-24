@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>real_bridge</name>
+  <version>0.1.0</version>
+  <description>Single-serial ros2_control hardware bridge for WheelBipe V14.</description>
+  <maintainer email="2231625449@qq.com">SCUTRobotLab</maintainer>
+  <license>MIT</license>
+  <url type="website">https://www.scutbot.cn/</url>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

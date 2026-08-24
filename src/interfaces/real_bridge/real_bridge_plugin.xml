@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<library path="real_bridge">
+  <class
+    name="template_real_ros2_ctrl::RealBridge"
+    type="template_real_ros2_ctrl::RealBridge"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>WheelBipe V14 single-serial hardware interface with normal DT7 packets.</description>
+  </class>
+</library>
