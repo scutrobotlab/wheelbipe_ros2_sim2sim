@@ -1,0 +1,666 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="wheelbipe_V14">
+  <xacro:macro name="description">
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.00272182620590107 0.000304793668434715 -0.013172731585452" rpy="0 0 0" />
+      <mass value="15.301" />
+      <inertia ixx="0.2207473" ixy="-0.0018843" ixz="0.0097564" iyy="0.2781394" iyz="-0.0000157" izz="0.3837124" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/base_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.866666666666667 0.866666666666667 0.890196078431372 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.03" rpy="0 0 0" />
+      <geometry>
+        <box size="0.54 0.3 0.23" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="gimbal_yaw_link">
+    <inertial>
+      <origin xyz="-0.0372174440092638 -0.0261123577016125 0.0832092793339446" rpy="0 0 0" />
+      <mass value="1.5357906" />
+      <inertia ixx="0.0067325" ixy="-0.0001706" ixz="0.0021948" iyy="0.0082788" iyz="0.0016361" izz="0.0076832" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/gimbal_yaw_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.333333333333333 0.333333333333333 0.333333333333333 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="gimbal_yaw_joint" type="continuous">
+    <origin xyz="0 0 0.0738140554649692" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="gimbal_yaw_link" />
+    <axis xyz="0 0 1" />
+  </joint>
+  <link name="gimbal_pitch_link">
+    <inertial>
+      <origin xyz="0.019 0.020 0.026" rpy="0 0 0" />
+      <mass value=" 2.444" />
+      <inertia ixx="0.0122404" ixy="0.0048080" ixz="0.0003879" iyy="0.0224074" iyz="0.0007834" izz=" 0.0243187" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/gimbal_pitch_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.847058823529412 0.972549019607843 0.780392156862745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.46 0.22 0.18" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gimbal_pitch_joint" type="continuous">
+    <origin xyz="-4.00314028271263E-05 0 0.153000010205595" rpy="0 0 0" />
+    <parent link="gimbal_yaw_link" />
+    <child link="gimbal_pitch_link" />
+    <axis xyz="0.0426940844525293 0.999088191879356 0" />
+  </joint>
+  <link name="left_front1_link">
+    <inertial>
+      <origin xyz="0.0319412844746662 0.00303813112858189 -0.00504969361495493" rpy="0 0 0" />
+      <mass value="0.104901726198101" />
+      <inertia ixx="3.6427030619965E-05" ixy="-1.16319729238462E-05" ixz="2.8814651003028E-05" iyy="0.000242346617492044" iyz="1.83893354224554E-06" izz="0.000214135558193141" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_front1_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.866666666666667 0.866666666666667 0.890196078431372 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.05 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.15 0.05 0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_front1_joint" type="continuous">
+    <origin xyz="0 0.1917 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="left_front1_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-3.14" upper="3.14" effort="40" velocity="10.472" />
+  </joint>
+  <link name="left_front2_link">
+    <inertial>
+      <origin xyz="-0.0592415713178412 -0.0044112435957154 -0.0323525297889223" rpy="0 0 0" />
+      <mass value="0.0393656211873359" />
+      <inertia ixx="2.17173476557346E-05" ixy="1.15286435388246E-19" ixz="-3.66989241172492E-05" iyy="8.99709261135011E-05" iyz="6.83781178333402E-20" izz="6.88759960479248E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_front2_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.929411764705882 0.929411764705882 0.929411764705882 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="left_front2_joint" type="continuous">
+    <origin xyz="0.112008896616463 -0.00250001568450689 -0.0177078230021778" rpy="0 0 0" />
+    <parent link="left_front1_link" />
+    <child link="left_front2_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="left_front3_link">
+    <inertial>
+      <origin xyz="-0.0790696530780328 0.00300000000646264 0.0650625466790041" rpy="0 0 0" />
+      <mass value="0.0357149681643268" />
+      <inertia ixx="6.51387374850737E-05" ixy="-2.92665658229339E-19" ixz="7.07704704933222E-05" iyy="0.000147976479175227" iyz="2.67622367677549E-19" izz="8.30520314991389E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_front3_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.929411764705882 0.929411764705882 0.929411764705882 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="left_front3_joint" type="continuous">
+    <origin xyz="-0.118483143020365 0.00200001567804467 -0.0647050595778444" rpy="0 0 0" />
+    <parent link="left_front2_link" />
+    <child link="left_front3_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="left_front4_link">
+    <inertial>
+      <origin xyz="-0.0482976718880289 -0.00448783778317802 -3.52495810318487E-15" rpy="0 0 0" />
+      <mass value="0.0294239135797063" />
+      <inertia ixx="1.31891673630238E-06" ixy="-3.26117176362031E-08" ixz="-1.6996836511182E-21" iyy="3.94413047668646E-05" iyz="3.07452478571538E-21" izz="3.85941568942074E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_front4_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.929411764705882 0.929411764705882 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.05 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.15 0.02 0.03" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_front4_joint" type="continuous">
+    <origin xyz="-0.147783990539633 -0.00249999989246882 0.135512830598322" rpy="0 0 0" />
+    <parent link="left_front3_link" />
+    <child link="left_front4_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="left_rear1_link">
+    <inertial>
+      <origin xyz="-0.0924068232547424 -0.0050907851577858 -0.000249941556972472" rpy="0 0 0" />
+      <mass value="0.289963934051498" />
+      <inertia ixx="0.000112591883486375" ixy="-2.21369799562156E-06" ixz="2.87355897823329E-05" iyy="0.00167500842955358" iyz="7.6090128872305E-07" izz="0.00156919839522687" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_rear1_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.866666666666667 0.866666666666667 0.890196078431372 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.1 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.27 0.03 0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_rear1_joint" type="continuous">
+    <origin xyz="0 0.189200008964892 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="left_rear1_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-3.14" upper="3.14" effort="40" velocity="10.472" />
+  </joint>
+  <link name="left_rear2_link">
+    <inertial>
+      <origin xyz="0.098937508577141 0.00771452355318558 -0.0787794404081097" rpy="0 0 0" />
+      <mass value="0.286715093782958" />
+      <inertia ixx="0.000983374100569231" ixy="5.80001585471418E-06" ixz="0.00111484526511378" iyy="0.00246896562764739" iyz="-6.10359816302488E-06" izz="0.00149555398283523" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_rear2_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.929411764705882 0.929411764705882 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.08 0.005 -0.065" rpy="0 0.58 0" />
+      <geometry>
+        <box size="0.32 0.015 0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_rear2_joint" type="continuous">
+    <origin xyz="-0.209999992295612 0.00249999078755264 0" rpy="0 0 0" />
+    <parent link="left_rear1_link" />
+    <child link="left_rear2_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.05" upper="1.05" effort="40" velocity="40" />
+  </joint>
+  <link name="left_wheel_link">
+    <inertial>
+      <origin xyz="-1.97308366246072E-05 0.0106477197396561 -2.60156626995592E-05" rpy="0 0 0" />
+      <mass value="0.365938536906933" />
+      <inertia ixx="0.000318087224837371" ixy="5.15884972423261E-08" ixz="7.4988839059118E-08" iyy="0.000613576118579162" iyz="6.59548972935904E-08" izz="0.00031813136199251" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_wheel_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.298039215686275 0.298039215686275 0.298039215686275 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0.012 0" rpy="1.5707996938995747 0 0" />
+      <geometry>
+        <cylinder radius="0.06" length="0.025" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_wheel_joint" type="continuous">
+    <origin xyz="0.197342851493493 0.0168500075278583 -0.153478978152361" rpy="0 0 0" />
+    <parent link="left_rear2_link" />
+    <child link="left_wheel_link" />
+    <axis xyz="0 1 0" />
+    <limit effort="10" velocity="52.229" />
+  </joint>
+  <link
+    name="left_spring1_link">
+    <inertial>
+      <origin
+        xyz="-0.0411116184651072 0.00032883000297354 0.00256147061387416"
+        rpy="0 0 0" />
+      <mass
+        value="0.0282731109868884" />
+      <inertia
+        ixx="3.98879539071575E-07"
+        ixy="-6.01411055446783E-08"
+        ixz="9.06402807373997E-07"
+        iyy="1.50301030515004E-05"
+        iyz="3.74710800229006E-09"
+        izz="1.48901762707958E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_spring1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.866666666666667 0.866666666666667 0.890196078431372 1" />
+      </material>
+    </visual>
+  </link>
+  <joint
+    name="left_spring1_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.0105 -0.048"
+      rpy="0 0 0" />
+    <parent
+      link="left_rear1_link" />
+    <child
+      link="left_spring1_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="left_spring2_link">
+    <inertial>
+      <origin
+        xyz="0.0627038548435204 0.000166439808996777 1.60566004936413E-14"
+        rpy="0 0 0" />
+      <mass
+        value="0.0867951717908488" />
+      <inertia
+        ixx="2.25682215443119E-06"
+        ixy="7.1683739555964E-08"
+        ixz="5.39943799205214E-19"
+        iyy="8.95145031506861E-05"
+        iyz="3.04402465419514E-22"
+        izz="8.9343891108684E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_descriptions/wheelbipeV14_2/meshes/left_spring2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+  </link>
+  <joint
+    name="left_spring2_joint"
+    type="prismatic">
+    <origin
+      xyz="-0.15793 0 0.0098396"
+      rpy="0 0.062225 0" />
+    <parent
+      link="left_spring1_link" />
+    <child
+      link="left_spring2_link" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.01"
+      upper="0.06"
+      effort="1000"
+      velocity="100" />
+  </joint>
+  <link name="right_front1_link">
+    <inertial>
+      <origin xyz="0.0319412874185421 -0.00303813070687328 -0.00504969361495894" rpy="0 0 0" />
+      <mass value="0.104901726198101" />
+      <inertia ixx="3.64270306199689E-05" ixy="1.16319729238455E-05" ixz="2.8814651003042E-05" iyy="0.000242346617492044" iyz="-1.83893354224621E-06" izz="0.000214135558193136" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_front1_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.866666666666667 0.866666666666667 0.890196078431372 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.05 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.15 0.05 0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_front1_joint" type="continuous">
+    <origin xyz="0 -0.191700000421712 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="right_front1_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-3.14" upper="3.14" effort="40" velocity="10.472" />
+  </joint>
+  <link name="right_front2_link">
+    <inertial>
+      <origin xyz="-0.0592415659558973 0.00441126227489286 -0.0323525297889211" rpy="0 0 0" />
+      <mass value="0.0393656211873359" />
+      <inertia ixx="2.1717347655733E-05" ixy="7.28921029868597E-20" ixz="-3.66989241172481E-05" iyy="8.99709261135011E-05" iyz="3.64889166580214E-20" izz="6.88759960479265E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_front2_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.929411764705882 0.929411764705882 0.929411764705882 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="right_front2_joint" type="continuous">
+    <origin xyz="0.11200889774817 0.00249999387733676 -0.0177078230021881" rpy="0 0 0" />
+    <parent link="right_front1_link" />
+    <child link="right_front2_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="right_front3_link">
+    <inertial>
+      <origin xyz="-0.0790696552748755 -0.00300000654437221 0.0650625466790037" rpy="0 0 0" />
+      <mass value="0.0357149681643267" />
+      <inertia ixx="6.51387374850791E-05" ixy="1.61469306122936E-19" ixz="7.07704704933227E-05" iyy="0.000147976479175226" iyz="-1.41553992835013E-19" izz="8.30520314991333E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_front3_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.929411764705882 0.929411764705882 0.929411764705882 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="right_front3_joint" type="continuous">
+    <origin xyz="-0.118483139011355 -0.00199998691125028 -0.0647050595778384" rpy="0 0 0" />
+    <parent link="right_front2_link" />
+    <child link="right_front3_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="right_front4_link">
+    <inertial>
+      <origin xyz="-0.0482976697735919 0.00448784422648799 1.4432899320127E-15" rpy="0 0 0" />
+      <mass value="0.0294239135797063" />
+      <inertia ixx="1.31891673630238E-06" ixy="3.26117176361978E-08" ixz="-2.16566422137791E-19" iyy="3.94413047668645E-05" iyz="3.92218171627904E-21" izz="3.85941568942074E-05" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_front4_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.929411764705882 0.929411764705882 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.05 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.15 0.02 0.03" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_front4_joint" type="continuous">
+    <origin xyz="-0.147783994850915 0.00249998691125017 0.135512830598319" rpy="0 0 0" />
+    <parent link="right_front3_link" />
+    <child link="right_front4_link" />
+    <axis xyz="0 1 0" />
+  </joint>
+  <link name="right_rear1_link">
+    <inertial>
+      <origin xyz="-0.0924068149601045 0.00509076964851959 -0.000249941556963243" rpy="0 0 0" />
+      <mass value="0.289963934051498" />
+      <inertia ixx="0.000112591883486374" ixy="2.21369799562198E-06" ixz="2.8735589782335E-05" iyy="0.00167500842955357" iyz="-7.60901288722655E-07" izz="0.00156919839522686" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_rear1_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.866666666666667 0.866666666666667 0.890196078431372 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.1 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.27 0.03 0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_rear1_joint" type="continuous">
+    <origin xyz="0 -0.189199993455626 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="right_rear1_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-3.14" upper="3.14" effort="40" velocity="10.472" />
+  </joint>
+  <link name="right_rear2_link">
+    <inertial>
+      <origin xyz="0.0989604725896676 -0.00771453190473206 -0.0787917967598395" rpy="0 0 0" />
+      <mass value="0.286715093581182" />
+      <inertia ixx="0.000983321028622142" ixy="-5.76086865764522E-06" ixz="0.00111481118846409" iyy="0.00246896562764005" iyz="6.08092179073833E-06" izz="0.00149560705477748" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_rear2_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.929411764705882 0.929411764705882 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.08 -0.005 -0.065" rpy="0 0.58 0" />
+      <geometry>
+        <box size="0.32 0.015 0.05" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_rear2_joint" type="continuous">
+    <origin xyz="-0.21 -0.00250000000000014 0" rpy="0 0 0" />
+    <parent link="right_rear1_link" />
+    <child link="right_rear2_link" />
+    <axis xyz="0 1 0" />
+    <limit lower="-0.05" upper="1.05" effort="40" velocity="40" />
+  </joint>
+  <link name="right_wheel_link">
+    <inertial>
+      <origin xyz="-1.39537737600497E-05 -0.0115297875590859 -3.33509587206737E-05" rpy="0 0 0" />
+      <mass value="0.330448593017859" />
+      <inertia ixx="0.000305724868918378" ixy="-3.11160525833705E-08" ixz="5.63164853776825E-08" iyy="0.000589140937312096" iyz="-7.77381038886867E-08" izz="0.000305833290347516" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_wheel_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.298039215686275 0.298039215686275 0.298039215686275 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.012 0" rpy="1.5707996938995747 0 0" />
+      <geometry>
+        <cylinder radius="0.06" length="0.025" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="right_wheel_joint" type="continuous">
+    <origin xyz="0.19734 -0.01685 -0.15348" rpy="0 0 0" />
+    <parent link="right_rear2_link" />
+    <child link="right_wheel_link" />
+    <axis xyz="0 1 0" />
+    <limit effort="10" velocity="52.229" />
+  </joint>
+  <link
+    name="right_spring1_link">
+    <inertial>
+      <origin
+        xyz="-0.0411116148831886 -0.000328821919326705 0.00256146127381136"
+        rpy="0 0 0" />
+      <mass
+        value="0.0282731109868884" />
+      <inertia
+        ixx="3.9887953907155E-07"
+        ixy="6.014110554467E-08"
+        ixz="9.06402807373805E-07"
+        iyy="1.50301030515004E-05"
+        iyz="-3.74710800228835E-09"
+        izz="1.48901762707958E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_spring1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.866666666666667 0.866666666666667 0.890196078431372 1" />
+      </material>
+    </visual>
+  </link>
+  <joint
+    name="right_spring1_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.01045 -0.048"
+      rpy="0 0 0" />
+    <parent
+      link="right_rear1_link" />
+    <child
+      link="right_spring1_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="right_spring2_link">
+    <inertial>
+      <origin
+        xyz="0.062703854842645 -0.000166440672945939 -3.62487817540114E-14"
+        rpy="0 0 0" />
+      <mass
+        value="0.0867951717908488" />
+      <inertia
+        ixx="2.25682215443119E-06"
+        ixy="-7.16837395560073E-08"
+        ixz="5.71072260016809E-19"
+        iyy="8.95145031506861E-05"
+        iyz="2.29956210289742E-22"
+        izz="8.93438911086839E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot_descriptions/wheelbipeV14_2/meshes/right_spring2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+  </link>
+  <joint
+    name="right_spring2_joint"
+    type="prismatic">
+    <origin
+      xyz="-0.15793 0 0.0098396"
+      rpy="0 0.062225 0" />
+    <parent
+      link="right_spring1_link" />
+    <child
+      link="right_spring2_link" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="-0.01"
+      upper="0.06"
+      effort="1000"
+      velocity="100" />
+  </joint>
+
+  <loop_joint name="left_f4r2_joint" type="spherical">
+    <link1 link="left_front4_link" rpy="0 0 0" xyz="-0.0966 0 0" />
+    <link2 link="left_rear2_link" rpy="0 0 0" xyz="-0.04086 -0.003 0.0531" />
+  </loop_joint>
+  <loop_joint name="left_f3r1_joint" type="spherical">
+    <link1 link="left_front3_link" rpy="0 0 0" xyz="-0.10693 -0.002 0.08241" />
+    <link2 link="left_rear1_link" rpy="0 0 0" xyz="-0.1134 0 0" />
+  </loop_joint>
+  <loop_joint name="left_s2r2_joint" type="spherical">
+    <link1 link="left_spring2_link" rpy="0 0 0" xyz="0 0 0" />
+    <link2 link="left_rear2_link" rpy="0 0 0" xyz="0.05207 0.013 -0.03816" />
+  </loop_joint>
+  <loop_joint name="right_f4r2_joint" type="spherical">
+    <link1 link="right_front4_link" rpy="0 0 0" xyz="-0.0966 0 0" />
+    <link2 link="right_rear2_link" rpy="0 0 0" xyz="-0.04086 0.003 0.0531" />
+  </loop_joint>
+  <loop_joint name="right_f3r1_joint" type="spherical">
+    <link1 link="right_front3_link" rpy="0 0 0" xyz="-0.10693 0.002 0.08241" />
+    <link2 link="right_rear1_link" rpy="0 0 0" xyz="-0.1134 0 0" />
+  </loop_joint>
+  <loop_joint name="right_s2r2_joint" type="spherical">
+    <link1 link="right_spring2_link" rpy="0 0 0" xyz="0 0 0" />
+    <link2 link="right_rear2_link" rpy="0 0 0" xyz="0.05207 -0.013 -0.03816" />
+  </loop_joint>
+
+  </xacro:macro>
+</robot>

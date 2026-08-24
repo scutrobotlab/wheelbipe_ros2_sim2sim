@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="wheelbipe_V14">
+  <xacro:arg name="serial_port" default="/dev/wheelbipe_h7"/>
+  <xacro:arg name="baudrate" default="2000000"/>
+  <xacro:arg name="serial_reconnect_interval_ms" default="1000"/>
+  <xacro:arg name="state_timeout_ms" default="100"/>
+
+  <xacro:include filename="$(find robot_descriptions)/wheelbipe_V14/xacro/description.xacro"/>
+  <xacro:include filename="$(find robot_descriptions)/wheelbipe_V14/xacro/ros2control.xacro"/>
+
+  <xacro:description/>
+  <xacro:ros2control
+    name="RealControl"
+    backend="real"
+    serial_port="$(arg serial_port)"
+    baudrate="$(arg baudrate)"
+    serial_reconnect_interval_ms="$(arg serial_reconnect_interval_ms)"
+    state_timeout_ms="$(arg state_timeout_ms)"/>
+</robot>

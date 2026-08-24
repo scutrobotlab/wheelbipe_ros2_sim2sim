@@ -1,0 +1,241 @@
+<mujoco model="wheelbipeV14_2">
+  <default>
+    <default class="robot">
+      <default class="motor">
+        <joint damping="0.01" armature="0.001" frictionloss="0.01"/>
+        <motor />
+      </default>
+      <default class="visual">
+        <geom material="visualgeom" contype="0" conaffinity="0" group="2" />
+      </default>
+      <default class="collision">
+        <geom material="collision_material" condim="3" contype="0" conaffinity="1" priority="1" group="1" solref="0.005 1" solimp="0.99 0.999 1e-05" friction="1 0.01 0.01" />
+      </default>
+    </default>
+  </default>
+
+  <compiler angle="radian" />
+
+  <asset>
+    <material name="visualgeom" rgba="0.7 0.7 0.7 1" />
+    <material name="red" rgba="1 1 1 1" />
+    <material name="default_material" rgba="0.7 0.7 0.7 1" />
+    <material name="collision_material" rgba="0 0 0 0" />
+    <mesh name="base_link.STL" file="../meshes/base_link.STL" />
+    <mesh name="gimbal_yaw_link.STL" file="../meshes/gimbal_yaw_link.STL" />
+    <mesh name="gimbal_pitch_link.STL" file="../meshes/gimbal_pitch_link.STL" />
+    <mesh name="left_front1_link.STL" file="../meshes/left_front1_link.STL" />
+    <mesh name="left_front2_link.STL" file="../meshes/left_front2_link.STL" />
+    <mesh name="left_front3_link.STL" file="../meshes/left_front3_link.STL" />
+    <mesh name="left_front4_link.STL" file="../meshes/left_front4_link.STL" />
+    <mesh name="left_rear1_link.STL" file="../meshes/left_rear1_link.STL" />
+    <mesh name="left_rear2_link.STL" file="../meshes/left_rear2_link.STL" />
+    <mesh name="left_wheel_link.STL" file="../meshes/left_wheel_link.STL" />
+    <mesh name="left_spring1_link.STL" file="../meshes/left_spring1_link.STL" />
+    <mesh name="left_spring2_link.STL" file="../meshes/left_spring2_link.STL" />
+    <mesh name="right_front1_link.STL" file="../meshes/right_front1_link.STL" />
+    <mesh name="right_front2_link.STL" file="../meshes/right_front2_link.STL" />
+    <mesh name="right_front3_link.STL" file="../meshes/right_front3_link.STL" />
+    <mesh name="right_front4_link.STL" file="../meshes/right_front4_link.STL" />
+    <mesh name="right_rear1_link.STL" file="../meshes/right_rear1_link.STL" />
+    <mesh name="right_rear2_link.STL" file="../meshes/right_rear2_link.STL" />
+    <mesh name="right_wheel_link.STL" file="../meshes/right_wheel_link.STL" />
+    <mesh name="right_spring1_link.STL" file="../meshes/right_spring1_link.STL" />
+    <mesh name="right_spring2_link.STL" file="../meshes/right_spring2_link.STL" />
+  </asset>
+
+  <worldbody>
+    <body name="base_link" pos="0.00000000 0.00000000 0.6" quat="1 0 0 0" childclass="robot">
+      <freejoint name="floating_base" />
+      <inertial pos="-0.00582119 0.00168176 -0.04109210" mass="17.96301741" fullinertia="0.19890602 0.29839691 0.37398203 -0.00177966 0.00594931 -0.00016768" />
+      <geom name="base_link_collision" pos="0.0051111 0.001174 -0.0455102" quat="0.00240133226452 -0.999876547414 -0.014053463742 -0.00660482335908" type="box" size="0.225 0.15 0.1" class="collision" />
+      <geom name="base_link_visual" pos="0 0 -0.117" quat="1 0 0 0" material="default_material" type="mesh" mesh="base_link.STL" class="visual" />
+      <body name="gimbal_yaw_link" pos="0 0 0.05495" quat="1 0 0 0">
+        <site name="gimbal_yaw_joint_site" pos="0 0 0" quat="1 0 0 0" />
+        <inertial pos="-0.032712 0.039683 0.102088" mass="1.1135894" fullinertia="0.0115811 0.0131184 0.0083629 0.0022103 0.0053499 -0.0031031" />
+        <geom name="gimbal_yaw_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="gimbal_yaw_link.STL" class="visual" />
+        <body name="gimbal_pitch_link" pos="-0.058485 -0.0553 0.18" quat="1 0 0 0">
+          <site name="gimbal_pitch_joint_site" pos="0 0 0" quat="1 0 0 0" />
+          <inertial pos="0.077937 0.022206 -0.043928" mass="2.9094813" fullinertia="0.0152198 0.019075 0.0180859 -0.0020655 0.0058831 0.001189" />
+          <geom name="gimbal_pitch_link_collision" pos="0.1222416 0.0276848 -0.0553651" quat="0.974370054158 0 0.224951100374 0" type="box" size="0.175 0.1 0.0912243" class="collision" />
+          <geom name="gimbal_pitch_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="gimbal_pitch_link.STL" class="visual" />
+        </body>
+      </body>
+      <body name="left_front1_link" pos="0 0.1845 0" quat="1 0 0 0">
+        <joint name="left_front1_joint" type="hinge" ref="0.0" class="motor" axis="0 1 0" damping="0.0" frictionloss="1.5" armature="0.035" />
+        <site name="left_front1_joint_site" pos="0 0 0" quat="1 0 0 0" />
+        <inertial pos="0.02531605 -0.01412400 0.00293202" mass="0.13665924" fullinertia="0.00005570 0.00023381 0.00022127 -0.00003357 -0.00001944 -0.00000389" />
+        <geom name="left_front1_link_collision" pos="0.0470403 -0.0125 6.4e-06" quat="1 0 0 0" type="box" size="0.0755403 0.0125 0.02845995" class="collision" />
+        <geom name="left_front1_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_front1_link.STL" class="visual" />
+        <body name="left_front2_link" pos="0.11265 -0.0095 0.013046" quat="1 0 0 0">
+          <joint name="left_front2_joint" type="hinge" ref="0.0" class="motor" range="-1 0.1" axis="0 1 0" />
+          <site name="left_front2_joint_site" pos="0 0 0" quat="1 0 0 0" />
+          <inertial pos="-0.0544 -0.0044715 -0.0399756" quat="1 0 0 0" mass="0.0328941" diaginertia="2.95e-05 8.24e-05 5.34e-05" />
+          <geom name="left_front2_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_front2_link.STL" class="visual" />
+          <body name="left_front3_link" pos="-0.10879 0.0065 -0.079941" quat="1 0 0 0">
+            <joint name="left_front3_joint" type="hinge" ref="0.0" class="motor" range="-0.1 1" axis="0 1 0" />
+            <site name="left_front3_joint_site" pos="0 0 0" quat="1 0 0 0" />
+            <inertial pos="-0.0844609 -0.002949 0.0515978" quat="1 0 0 0" mass="0.044351" diaginertia="5.04e-05 0.0001643 0.0001141" />
+            <geom name="left_front3_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_front3_link.STL" class="visual" />
+            <body name="left_front4_link" pos="-0.16505 -0.0065 0.11386" quat="1 0 0 0">
+              <joint name="left_front4_joint" type="hinge" ref="0.0" class="motor" range="-2 0.1" axis="0 1 0" />
+              <site name="left_front4_joint_site" pos="0 0 0" quat="1 0 0 0" />
+              <inertial pos="-0.0483173 -0.0045295 0" quat="1 0 0 0" mass="0.0271098" diaginertia="1.3e-06 3.88e-05 3.79e-05" />
+              <geom name="left_front4_link_collision" pos="-0.0483739 -0.005 0" quat="1 0 0 0" type="box" size="0.06072605 0.005 0.01242835" class="collision" />
+              <geom name="left_front4_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_front4_link.STL" class="visual" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="left_rear1_link" pos="0 0.174 0" quat="1 0 0 0">
+        <joint name="left_rear1_joint" type="hinge" ref="0.0" class="motor" limited="true" range="-3.14 1" axis="0 1 0" armature="0.035" damping="0.0" frictionloss="0.0" />
+        <site name="left_rear1_joint_site" pos="0 0 0" quat="1 0 0 0" />
+        <inertial pos="-0.11878103 -0.00279462 0.00086226" mass="0.38254442" fullinertia="0.00013214 0.00273881 0.00266568 0.00015056 0.00003507 -0.00000111" />
+        <geom name="left_rear1_link_collision" pos="-0.0993414 0.001 -0.0097397" quat="1 0 0 0" type="box" size="0.1323414 0.013 0.0426967" class="collision" />
+        <geom name="left_rear1_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_rear1_link.STL" class="visual" />
+        <body name="left_rear2_link" pos="-0.21 0.0145 0" quat="1 0 0 0">
+          <joint name="left_rear2_joint" type="hinge" ref="0.0" class="motor" range="0 1.2" axis="0 1 0" />
+          <site name="left_rear2_joint_site" pos="0 0 0" quat="1 0 0 0" />
+          <site name="left_s2r2_rear2_site" pos="0.04758 -0.01405 -0.02292" quat="0.997796329836319 0 0.0663512182644112 0" />
+          <inertial pos="0.08464616 -0.00523955 -0.04743407" mass="0.31135718" fullinertia="0.00102346 0.00354846 0.00253867 0.00002545 0.00148132 -0.00001794" />
+          <geom name="left_rear2_link_collision" pos="0.088539 -0.0060013 -0.04" quat="0.6849543239 0.678498447369 0.188647262282 -0.186787691033" type="box" size="0.16 0.03913025 0.00638655" class="collision" />
+          <geom name="left_rear2_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_rear2_link.STL" class="visual" />
+          <body name="left_wheel_link" pos="0.21661 0.03355 -0.12483" quat="1 0 0 0">
+            <joint name="left_wheel_joint" type="hinge" ref="0.0" class="motor" axis="0 1 0" damping="0.00" frictionloss="0.023" />
+            <site name="left_wheel_joint_site" pos="0 0 0" quat="1 0 0 0" />
+            <inertial pos="0.00015349 -0.02021922 -0.00011469" mass="0.51208444" fullinertia="0.00038955 0.00063306 0.00038893 0.00000081 -0.00000093 -0.00000059" />
+            <geom name="left_wheel_link_collision" pos="0 -0.0125 0" quat="0.70710679066 0.707106771713 0 0" type="cylinder" size="0.06 0.0125" class="collision" friction="5.5 0.1 0.01" />
+            <geom name="left_wheel_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_wheel_link.STL" class="visual" />
+          </body>
+        </body>
+        <body name="left_spring1_link" pos="0.0023551 -0.002 -0.044938" quat="1 0 0 0">
+          <joint name="left_spring1_joint" type="hinge" ref="0.0" class="motor" range="-0.5 0.1" axis="0 1 0" />
+          <site name="left_spring1_joint_site" pos="0 0 0" quat="1 0 0 0" />
+          <inertial pos="-0.0452477 -0.005217 0.0060453" quat="1 0 0 0" mass="0.0305218" diaginertia="7e-07 1.78e-05 1.74e-05" />
+          <geom name="left_spring1_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_spring1_link.STL" class="visual" />
+          <body name="left_spring2_link" pos="-0.03295 -0.0055 0.0044022" quat="0.997795666274 0 0.0663611962244 0">
+            <joint name="left_spring2_joint" type="slide" ref="0.0" class="motor" range="-0.015 0.065" axis="-1 0 0" damping="0" frictionloss="0" />
+            <site name="left_spring2_joint_site" pos="0 0 0" quat="1 0 0 0" />
+            <site name="left_s2r2_spring2_site" pos="-0.133 0.00795 0.0" quat="1 0 0 0" />
+            <inertial pos="-0.0688384 0.0001674 0" quat="1 0 0 0" mass="0.0923989" diaginertia="2.5e-06 0.0001019 0.0001017" />
+            <geom name="left_spring2_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="left_spring2_link.STL" class="visual" />
+          </body>
+        </body>
+      </body>
+      <body name="right_front1_link" pos="0 -0.1845 0" quat="1 0 0 0">
+        <joint name="right_front1_joint" type="hinge" ref="0.0" class="motor" axis="0 1 0" damping="0.0" frictionloss="1.5" armature="0.035" />
+        <site name="right_front1_joint_site" pos="0 0 0" quat="1 0 0 0" />
+        <inertial pos="0.02850117 0.01065212 0.00330091" mass="0.12138704" fullinertia="0.00004217 0.00021931 0.00019686 0.00002156 -0.00001816 0.00000250" />
+        <geom name="right_front1_link_collision" pos="0.0470403 0.0125 6.4e-06" quat="1 0 0 0" type="box" size="0.0755403 0.0125 0.02845995" class="collision" />
+        <geom name="right_front1_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_front1_link.STL" class="visual" />
+        <body name="right_front2_link" pos="0.11265 0.0095 0.013046" quat="1 0 0 0">
+          <joint name="right_front2_joint" type="hinge" ref="0.0" class="motor" range="-1 0.1" axis="0 1 0" />
+          <site name="right_front2_joint_site" pos="0 0 0" quat="1 0 0 0" />
+          <inertial pos="-0.0543861 0.0044715 -0.0399654" quat="1 0 0 0" mass="0.0328941" diaginertia="2.95e-05 8.24e-05 5.34e-05" />
+          <geom name="right_front2_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_front2_link.STL" class="visual" />
+          <body name="right_front3_link" pos="-0.10879 -0.0065 -0.079941" quat="1 0 0 0">
+            <joint name="right_front3_joint" type="hinge" ref="0.0" class="motor" range="-0.1 1" axis="0 1 0" />
+            <site name="right_front3_joint_site" pos="0 0 0" quat="1 0 0 0" />
+            <inertial pos="-0.0844609 0.002949 0.0515978" quat="1 0 0 0" mass="0.044351" diaginertia="5.04e-05 0.0001643 0.0001141" />
+            <geom name="right_front3_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_front3_link.STL" class="visual" />
+            <body name="right_front4_link" pos="-0.16505 0.0065 0.11386" quat="1 0 0 0">
+              <joint name="right_front4_joint" type="hinge" ref="0.0" class="motor" range="-2 0.1" axis="0 1 0" />
+              <site name="right_front4_joint_site" pos="0 0 0" quat="1 0 0 0" />
+              <inertial pos="-0.0483173 0.0045295 0" quat="1 0 0 0" mass="0.0271098" diaginertia="1.3e-06 3.88e-05 3.79e-05" />
+              <geom name="right_front4_link_collision" pos="-0.0483739 0.005 0" quat="1 0 0 0" type="box" size="0.06072605 0.005 0.01242835" class="collision" />
+              <geom name="right_front4_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_front4_link.STL" class="visual" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="right_rear1_link" pos="0 -0.174 0" quat="1 0 0 0">
+        <joint name="right_rear1_joint" type="hinge" ref="0.0" class="motor" limited="true" range="-3.14 1" axis="0 1 0" armature="0.035" damping="0.0" frictionloss="0.0" />
+        <site name="right_rear1_joint_site" pos="0 0 0" quat="1 0 0 0" />
+        <inertial pos="-0.11878102 0.00279462 0.00086226" mass="0.38254442" fullinertia="0.00013214 0.00273881 0.00266568 -0.00015056 0.00003507 0.00000111" />
+        <geom name="right_rear1_link_collision" pos="-0.0993414 -0.001 -0.0097397" quat="1 0 0 0" type="box" size="0.1323414 0.013 0.0426967" class="collision" />
+        <geom name="right_rear1_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_rear1_link.STL" class="visual" />
+        <body name="right_rear2_link" pos="-0.21 -0.0145 0" quat="1 0 0 0">
+          <joint name="right_rear2_joint" type="hinge" ref="0.0" class="motor" range="0 1.2" axis="0 1 0" />
+          <site name="right_rear2_joint_site" pos="0 0 0" quat="1 0 0 0" />
+          <site name="right_s2r2_rear2_site" pos="0.04758 0.01405 -0.02292" quat="0.997796329836319 0 0.0663512182644112 0" />
+          <inertial pos="0.08401127 0.00545683 -0.04698266" mass="0.30296958" fullinertia="0.00101902 0.00353775 0.00253117 -0.00002700 0.00147745 0.00001904" />
+          <geom name="right_rear2_link_collision" pos="0.08855 0.0060154 -0.04" quat="0.683072675465 -0.680699920397 0.187956387594 0.186364521216" type="box" size="0.16 0.03884575 0.00632955" class="collision" />
+          <geom name="right_rear2_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_rear2_link.STL" class="visual" />
+          <body name="right_wheel_link" pos="0.21661 -0.03355 -0.12483" quat="1 0 0 0">
+            <joint name="right_wheel_joint" type="hinge" ref="0.0" class="motor" axis="0 1 0" damping="0.00" frictionloss="0.023" />
+            <site name="right_wheel_joint_site" pos="0 0 0" quat="1 0 0 0" />
+            <inertial pos="0.00017786 0.02021922 -0.00007128" mass="0.51208444" fullinertia="0.00038992 0.00063306 0.00038855 -0.00000092 -0.00000070 0.00000038" />
+            <geom name="right_wheel_link_collision" pos="0 0.0125 0" quat="0.70710679066 0.707106771713 0 0" type="cylinder" size="0.06 0.0125" class="collision" friction="5.5 0.1 0.01" />
+            <geom name="right_wheel_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_wheel_link.STL" class="visual" />
+          </body>
+        </body>
+        <body name="right_spring1_link" pos="0.0023551 0.00195 -0.0449383" quat="1 0 0 0">
+          <joint name="right_spring1_joint" type="hinge" ref="0.0" class="motor" range="-0.5 0.1" axis="0 1 0" />
+          <site name="right_spring1_joint_site" pos="0 0 0" quat="1 0 0 0" />
+          <inertial pos="-0.0452477 0.005217 0.0060453" quat="1 0 0 0" mass="0.0305218" diaginertia="7e-07 1.78e-05 1.74e-05" />
+          <geom name="right_spring1_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_spring1_link.STL" class="visual" />
+          <body name="right_spring2_link" pos="-0.03295 0.0055 0.0044022" quat="0.997795666274 0 0.0663611962244 0">
+            <joint name="right_spring2_joint" type="slide" ref="0.0" class="motor" range="-0.015 0.065" axis="-1 0 0" damping="0" frictionloss="0" />
+            <site name="right_spring2_joint_site" pos="0 0 0" quat="1 0 0 0" />
+            <site name="right_s2r2_spring2_site" pos="-0.133 -0.00795 0.0" quat="1 0 0 0" />
+            <inertial pos="-0.0688384 -0.0001674 0" quat="1 0 0 0" mass="0.0923989" diaginertia="2.5e-06 0.0001019 0.0001017" />
+            <geom name="right_spring2_link_visual" pos="0 0 0" quat="1 0 0 0" material="default_material" type="mesh" mesh="right_spring2_link.STL" class="visual" />
+          </body>
+        </body>
+      </body>
+      <site name="base_link_site" pos="0 0 0" quat="1 0 0 0" />
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="left_front1_joint_ctrl" joint="left_front1_joint" class="motor" forcelimited="true" forcerange="-54 54" />
+    <motor name="left_rear1_joint_ctrl" joint="left_rear1_joint" class="motor" forcelimited="true" forcerange="-54 54" />
+    <motor name="left_wheel_joint_ctrl" joint="left_wheel_joint" class="motor" forcelimited="true" forcerange="-5 5" />
+    <motor name="left_spring2_joint_ctrl" joint="left_spring2_joint" class="motor" />
+    <motor name="right_front1_joint_ctrl" joint="right_front1_joint" class="motor" forcelimited="true" forcerange="-54 54" />
+    <motor name="right_rear1_joint_ctrl" joint="right_rear1_joint" class="motor" forcelimited="true" forcerange="-54 54" />
+    <motor name="right_wheel_joint_ctrl" joint="right_wheel_joint" class="motor" forcelimited="true" forcerange="-5 5" />
+    <motor name="right_spring2_joint_ctrl" joint="right_spring2_joint" class="motor" />
+  </actuator>
+
+  <equality>
+    <connect body1="left_front4_link" body2="left_rear2_link" anchor="-0.0966 0 0" solref="0.001 1" solimp="0.99 0.99 0.01 0.5 2" />
+    <connect body1="left_front3_link" body2="left_rear1_link" anchor="-0.11726 -0.0075 0.06689" solref="0.001 1" solimp="0.99 0.99 0.01 0.5 2" />
+    <connect body1="left_spring2_link" body2="left_rear2_link" anchor="-0.133 0.00795 0" solref="0.001 1" solimp="0.99 0.99 0.01 0.5 2" />
+    <connect body1="right_front4_link" body2="right_rear2_link" anchor="-0.0966 0 0" solref="0.001 1" solimp="0.99 0.99 0.01 0.5 2" />
+    <connect body1="right_front3_link" body2="right_rear1_link" anchor="-0.11726 0.0075 0.06689" solref="0.001 1" solimp="0.99 0.99 0.01 0.5 2" />
+    <connect body1="right_spring2_link" body2="right_rear2_link" anchor="-0.133 -0.00795 0" solref="0.001 1" solimp="0.99 0.99 0.01 0.5 2" />
+  </equality>
+
+  <contact>
+    <exclude body1="base_link" body2="left_front1_link" />
+    <exclude body1="base_link" body2="left_rear1_link" />
+    <exclude body1="base_link" body2="gimbal_yaw_link" />
+    <exclude body1="gimbal_yaw_link" body2="gimbal_pitch_link" />
+    <exclude body1="left_rear1_link" body2="left_rear2_link" />
+    <exclude body1="left_rear2_link" body2="left_wheel_link" />
+    <exclude body1="left_rear1_link" body2="left_spring1_link" />
+    <exclude body1="left_spring1_link" body2="left_spring2_link" />
+    <exclude body1="base_link" body2="right_front1_link" />
+    <exclude body1="base_link" body2="right_rear1_link" />
+    <exclude body1="right_rear1_link" body2="right_rear2_link" />
+    <exclude body1="right_rear2_link" body2="right_wheel_link" />
+    <exclude body1="right_rear1_link" body2="right_spring1_link" />
+    <exclude body1="right_spring1_link" body2="right_spring2_link" />
+    <exclude body1="left_front1_link" body2="left_front2_link" />
+    <exclude body1="left_front2_link" body2="left_front3_link" />
+    <exclude body1="left_front3_link" body2="left_front4_link" />
+    <exclude body1="left_front4_link" body2="left_rear2_link" />
+    <exclude body1="left_front3_link" body2="left_rear1_link" />
+    <exclude body1="left_spring2_link" body2="left_rear2_link" />
+    <exclude body1="right_front4_link" body2="right_rear2_link" />
+    <exclude body1="right_front3_link" body2="right_rear1_link" />
+    <exclude body1="right_spring2_link" body2="right_rear2_link" />
+  </contact>
+
+  <sensor>
+    <framequat name="imu" objtype="site" objname="base_link_site" />
+    <gyro name="gyro" site="base_link_site" />
+    <accelerometer name="accelerometer" site="base_link_site" />
+  </sensor>
+</mujoco>

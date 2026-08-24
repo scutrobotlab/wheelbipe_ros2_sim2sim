@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="wheelbipe_V14">
+  <xacro:include filename="$(find robot_descriptions)/wheelbipe_V14/xacro/description.xacro"/>
+  <xacro:include filename="$(find robot_descriptions)/wheelbipe_V14/xacro/ros2control.xacro"/>
+
+  <xacro:description/>
+  <xacro:ros2control name="MujocoControl" backend="sim"/>
+</robot>
