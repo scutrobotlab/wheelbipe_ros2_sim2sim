@@ -116,10 +116,10 @@ flowchart LR
 If you find this project useful in your research, please consider citing:
 
 ```bibtex
-@software{wheeled_legged_rl2026,
+@software{wheelbipe_ros2_sim2sim2026,
   author = {Zhang, Zhirui and Cui, Yu},
-  title = {wheeled-legged_RL: Reinforcement Learning for Wheeled-legged Robots},
-  url = {https://github.com/scutrobotlab/wheeled-legged_RL},
+  title = {WheelBipe ROS 2 Sim2Sim / Sim2Real: Policy Deployment for Wheeled-legged Robots},
+  url = {https://github.com/scutrobotlab/wheelbipe_ros2_sim2sim},
   year = {2026}
 }
 ```
