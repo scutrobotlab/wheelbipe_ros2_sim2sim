@@ -108,3 +108,18 @@ flowchart LR
 ## 许可
 
 源码许可见 [LICENSE](LICENSE)。ONNX 模型、MuJoCo、ONNX Runtime 与机器人网格的来源和许可见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 及对应资产目录中的许可文件。
+
+## 引用 / Citation
+
+如果本项目对你的研究有所帮助，请考虑引用：
+
+If you find this project useful in your research, please consider citing:
+
+```bibtex
+@software{wheeled_legged_rl2026,
+  author = {Zhang, Zhirui and Cui, Yu},
+  title = {wheeled-legged_RL: Reinforcement Learning for Wheeled-legged Robots},
+  url = {https://github.com/scutrobotlab/wheeled-legged_RL},
+  year = {2026}
+}
+```
