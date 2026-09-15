@@ -20,6 +20,5 @@ mujoco-3.5.0/*
 !src/resources/robot_descriptions/wheelbipeV14_2/meshes/*.STL
 *.usd
 *.db3
-*.zip
 __pycache__/
 *.pyc
