@@ -23,6 +23,7 @@ find_package(Eigen3 REQUIRED)
 find_package(control_toolbox REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(rosgraph_msgs REQUIRED)
 
 set(THIS_PACKAGE_DEPENDS
@@ -37,6 +38,7 @@ set(THIS_PACKAGE_DEPENDS
   control_toolbox
   sensor_msgs
   std_msgs
+  geometry_msgs
   rosgraph_msgs
 )
 if(DEFINED ENV{MUJOCO_DIR} AND NOT "$ENV{MUJOCO_DIR}" STREQUAL "")

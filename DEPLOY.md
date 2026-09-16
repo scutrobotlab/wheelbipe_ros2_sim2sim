@@ -10,6 +10,18 @@
 - MuJoCo 3.5.0
 - ONNX Runtime 1.20.0 CPU（Linux x86_64）
 
+Ubuntu 24.04 等无法直接安装官方 Humble 二进制包的系统，可以使用用户态
+RoboStack 环境：
+
+```bash
+conda env create -f environment-humble.yml
+conda activate wheelbipe_humble
+```
+
+之后保持该环境激活，并在准备依赖时使用
+`./scripts/bootstrap.sh --skip-rosdep`。原生 Ubuntu 22.04 / Humble 环境仍按下文
+使用 rosdep 安装系统依赖。
+
 先安装 ROS 2 Humble，并初始化 rosdep：
 
 ```bash

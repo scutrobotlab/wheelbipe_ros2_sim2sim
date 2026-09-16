@@ -28,6 +28,8 @@
 #include "mujoco_ros2_control/mujoco_ros2_control.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/empty.hpp"
+#include "std_msgs/msg/float64.hpp"
+#include "geometry_msgs/msg/twist.hpp"
 
 // MuJoCo data structures
 mjModel* mujoco_model = nullptr;
@@ -84,6 +86,18 @@ int main(int argc, const char** argv) {
     return 1;
   }
 
+  // Resolve the task-owned start pose once. Robot descriptions remain reusable;
+  // startup and Backspace/ROS reset must restore the same approach distance.
+  const int home_keyframe = mj_name2id(mujoco_model, mjOBJ_KEY, "home");
+  auto reset_task_data = [&]() {
+    if (home_keyframe >= 0) {
+      mj_resetDataKeyframe(mujoco_model, mujoco_data, home_keyframe);
+    } else {
+      mj_resetData(mujoco_model, mujoco_data);
+    }
+  };
+  reset_task_data();
+
   // initialize mujoco control
   auto mujoco_control =
       std::make_unique<mujoco_ros2_control::MujocoRos2Control>(node, mujoco_model, mujoco_data);
@@ -109,6 +123,23 @@ int main(int argc, const char** argv) {
                      "Mujoco ros2 controller has been successfully initialized !");
 
   auto rendering = mujoco_ros2_control::MujocoRendering::get_instance();
+  if (!node->has_parameter("viewer_keyboard")) node->declare_parameter<bool>("viewer_keyboard", true);
+  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr motion_publisher;
+  rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr height_publisher;
+  if (render && node->get_parameter("viewer_keyboard").as_bool()) {
+    motion_publisher = node->create_publisher<geometry_msgs::msg::Twist>("motion_command", 1);
+    height_publisher = node->create_publisher<std_msgs::msg::Float64>("height_command", 1);
+    rendering->set_motion_callback([&](double forward, double yaw, double height) {
+      if (!rclcpp::ok()) return;
+      geometry_msgs::msg::Twist motion;
+      motion.linear.x = forward;
+      motion.angular.z = yaw;
+      std_msgs::msg::Float64 height_msg;
+      height_msg.data = height;
+      motion_publisher->publish(motion);
+      height_publisher->publish(height_msg);
+    });
+  }
   if (render) {
     // Initialize the interactive MuJoCo viewer.
     if (!glfwInit()) {
@@ -123,7 +154,7 @@ int main(int argc, const char** argv) {
   // Run the main loop, targeting real-time simulation and 60 fps rendering.
   auto next_headless_step = std::chrono::steady_clock::now();
   auto reset_simulation = [&]() {
-    mj_resetData(mujoco_model, mujoco_data);
+    reset_task_data();
     mj_forward(mujoco_model, mujoco_data);
     mujoco_control->reset_sim_time();
     next_headless_step = std::chrono::steady_clock::now();

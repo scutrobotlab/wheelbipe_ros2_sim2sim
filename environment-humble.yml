@@ -1,0 +1,22 @@
+name: wheelbipe_humble
+channels:
+  - conda-forge
+  - robostack-humble
+dependencies:
+  - python=3.12
+  - ros-humble-ros-base
+  - ros-humble-ros2-control
+  - ros-humble-ros2-controllers
+  - ros-humble-generate-parameter-library
+  - ros-humble-control-toolbox
+  - ros-humble-xacro
+  - ros-humble-robot-state-publisher
+  - ros-humble-rmw-fastrtps-cpp
+  - colcon-common-extensions
+  - rosdep
+  - glfw
+  - eigen
+  - cmake
+  - make
+  - pkg-config
+  - compilers

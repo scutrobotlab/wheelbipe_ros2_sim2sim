@@ -45,7 +45,7 @@
   </asset>
 
   <worldbody>
-    <body name="base_link" pos="0.00000000 0.00000000 0.6" quat="1 0 0 0" childclass="robot">
+    <body name="base_link" pos="0.00000000 0.00000000 0.38" quat="1 0 0 0" childclass="robot">
       <freejoint name="floating_base" />
       <inertial pos="-0.00582119 0.00168176 -0.04109210" mass="17.96301741" fullinertia="0.19890602 0.29839691 0.37398203 -0.00177966 0.00594931 -0.00016768" />
       <geom name="base_link_collision" pos="0.0051111 0.001174 -0.0455102" quat="0.00240133226452 -0.999876547414 -0.014053463742 -0.00660482335908" type="box" size="0.225 0.15 0.1" class="collision" />

@@ -30,9 +30,7 @@ def _parse_bool(value, name):
         return True
     if normalized in ("0", "false", "no", "off"):
         return False
-    raise RuntimeError(
-        f"{name} must be one of true/false, yes/no, on/off, or 1/0; got {value!r}"
-    )
+    raise RuntimeError(f"{name} must be one of true/false, yes/no, on/off, or 1/0; got {value!r}")
 
 
 def _parse_duration(value):
@@ -54,12 +52,23 @@ def launch_setup(context, *args, **kwargs):
     render = _parse_bool(LaunchConfiguration("render").perform(context), "render")
     run_duration = _parse_duration(LaunchConfiguration("run_duration").perform(context))
 
+    sim_profile = LaunchConfiguration("sim_profile").perform(context)
+    terrain = LaunchConfiguration("terrain").perform(context)
+    if terrain not in ("default", "rmuc2026"):
+        raise RuntimeError(f"Unknown terrain: {terrain}")
+    if terrain == "rmuc2026" and sim_profile != "source_v14":
+        raise RuntimeError("rmuc2026 requires the source_v14 robot profile")
+    if sim_profile not in ("deployment", "source_v14"):
+        raise RuntimeError(f"Unknown sim_profile: {sim_profile}")
+
     descriptions_share = get_package_share_directory("robot_descriptions")
-    robot_xacro = os.path.join(
-        descriptions_share, "wheelbipe_V14", "xacro", "robot_sim.xacro"
-    )
+    robot_xacro = os.path.join(descriptions_share, "wheelbipe_V14", "xacro", "robot_sim.xacro")
     mujoco_model = os.path.join(
-        descriptions_share, "wheelbipeV14_2", "mjcf", "scene.xml"
+        descriptions_share,
+        "wheelbipeV14_2",
+        "mjcf",
+        "scene_rmuc2026.xml" if terrain == "rmuc2026" else
+        ("scene_source.xml" if sim_profile == "source_v14" else "scene.xml"),
     )
     controller_config = LaunchConfiguration("controller_config").perform(context)
 
@@ -68,7 +77,9 @@ def launch_setup(context, *args, **kwargs):
             raise RuntimeError(f"Required bringup file is missing: {required_path}")
 
     robot_description = {
-        "robot_description": Command([FindExecutable(name="xacro"), " ", robot_xacro])
+        "robot_description": Command(
+            [FindExecutable(name="xacro"), " ", robot_xacro, " sim_profile:=", sim_profile]
+        )
     }
     simulation = Node(
         package="mujoco_ros2_control",
@@ -85,6 +96,7 @@ def launch_setup(context, *args, **kwargs):
                 "imu_topic": "imu/data",
                 "imu_frame_id": "imu",
                 "render": render,
+                "viewer_keyboard": _parse_bool(LaunchConfiguration("viewer_keyboard").perform(context), "viewer_keyboard"),
                 "headless_real_time": True,
                 "run_duration": run_duration,
             },
@@ -105,9 +117,7 @@ def launch_setup(context, *args, **kwargs):
             target_action=simulation,
             on_exit=[
                 EmitEvent(
-                    event=Shutdown(
-                        reason="MuJoCo exited; stopping the remaining launch processes."
-                    )
+                    event=Shutdown(reason="MuJoCo exited; stopping the remaining launch processes.")
                 )
             ],
         )
@@ -138,6 +148,9 @@ def generate_launch_description():
                 default_value="0.0",
                 description="Simulation seconds before automatic shutdown; 0 runs indefinitely.",
             ),
+            DeclareLaunchArgument("sim_profile", default_value="deployment"),
+            DeclareLaunchArgument("terrain", default_value="default"),
+            DeclareLaunchArgument("viewer_keyboard", default_value="true"),
             OpaqueFunction(function=launch_setup),
         ]
     )

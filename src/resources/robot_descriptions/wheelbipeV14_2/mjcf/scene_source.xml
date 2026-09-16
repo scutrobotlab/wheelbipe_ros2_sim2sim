@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <mujoco model="robot scene">
-  <include file="wheelbipeV14_2.xml" />
+  <include file="wheelbipeV14_2_source.xml" />
   <option
     timestep="0.001"
     integrator="Euler"
@@ -61,4 +61,6 @@
       contype="1"
       conaffinity="1" />
   </worldbody>
+  <!-- 2.7 m straight approach to the 200 mm face at x=1.20. -->
+  <keyframe><key name="home" qpos="-1.5 0 0.38 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" ctrl="0 0 0 0 0 0 0 0"/></keyframe>
 </mujoco>

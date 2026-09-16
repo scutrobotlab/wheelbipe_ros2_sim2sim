@@ -6,14 +6,9 @@ _wheelbipe_ros_domain_id="${ROS_DOMAIN_ID:-0}"
 _wheelbipe_ros_localhost_only="${ROS_LOCALHOST_ONLY:-1}"
 _wheelbipe_rmw_implementation="${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}"
 
-if [ -f /opt/ros/humble/setup.bash ]; then
+if [ -f "${_wheelbipe_ws}/setup_ros_base.bash" ]; then
   # shellcheck disable=SC1091
-  source /opt/ros/humble/setup.bash
-fi
-
-if [ -f "${_wheelbipe_ws}/setup_mujoco_env.bash" ]; then
-  # shellcheck disable=SC1091
-  source "${_wheelbipe_ws}/setup_mujoco_env.bash"
+  source "${_wheelbipe_ws}/setup_ros_base.bash" || return 1
 fi
 
 if [ -f "${_wheelbipe_ws}/install/setup.bash" ]; then

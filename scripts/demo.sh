@@ -6,12 +6,16 @@ render=true
 duration=0.0
 xbox=false
 backend=sim
+sim_profile="${WHEELBIPE_SIM_PROFILE:-deployment}"
+terrain="${WHEELBIPE_TERRAIN:-default}"
+viewer_keyboard=true
 real_serial_port="${WHEELBIPE_REAL_SERIAL_PORT:-/dev/wheelbipe_h7}"
 use_dt7=false
 disable_dt7=false
 
 usage() {
   echo "Usage: ./scripts/demo.sh [--headless] [--xbox] [--duration SECONDS]"
+  echo "       [--terrain default|rmuc2026] [--no-viewer-keyboard]"
   echo "       ./scripts/demo.sh --real [--serial-port DEVICE] [--no-dt7 | --xbox]"
 }
 
@@ -23,7 +27,16 @@ while (($#)); do
       ;;
     --xbox)
       xbox=true
+      viewer_keyboard=false
       shift
+      ;;
+    --no-viewer-keyboard)
+      viewer_keyboard=false
+      shift
+      ;;
+    --terrain)
+      terrain="${2:?--terrain requires default or rmuc2026}"
+      shift 2
       ;;
     --real)
       backend=real
@@ -62,7 +75,7 @@ while (($#)); do
   esac
 done
 
-if ! python3 - "${duration}" <<'PY'
+if ! uv run --no-project python - "${duration}" <<'PY'
 import math
 import sys
 
@@ -87,7 +100,10 @@ set +u
 source "${repository_root}/setup_ros_domain.bash"
 set -u
 
-export WHEELBIPE_RL_MODEL_PATH="${repository_root}/src/controllers/template_ros2_controller/policy/parallel/V14-35-flat-and-rotation-13k.onnx"
+# Keep an explicitly supplied model path (for example, a freshly exported
+# checkpoint from the remote RL run); fall back to the bundled baseline only
+# when the caller did not provide one.
+export WHEELBIPE_RL_MODEL_PATH="${WHEELBIPE_RL_MODEL_PATH:-${repository_root}/src/controllers/template_ros2_controller/policy/parallel/V14-35-flat-and-rotation-13k.onnx}"
 
 auto_enter_rl=true
 if [[ "${backend}" == real && "${disable_dt7}" == false ]]; then
@@ -112,6 +128,9 @@ fi
 
 ros2 launch template_middleware template_bring_up.launch.py \
   backend:="${backend}" \
+  sim_profile:="${sim_profile}" \
+  terrain:="${terrain}" \
+  viewer_keyboard:="${viewer_keyboard}" \
   prefix:=wheelbipe_V14 \
   render:="${render}" \
   run_duration:="${duration}" \

@@ -1,0 +1,5 @@
+# Deterministic source-parameter simulation of the clean 200 mm course.
+# Ordered joints: four legs, two wheels, two passive springs.
+default_command_height: 0.40
+joint_output_max: [40.0, 40.0, 40.0, 40.0, 5.0, 5.0, 1000.0, 1000.0]
+joint_output_min: [-40.0, -40.0, -40.0, -40.0, -5.0, -5.0, -1000.0, -1000.0]

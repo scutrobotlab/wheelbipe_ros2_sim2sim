@@ -14,18 +14,18 @@
   <xacro:property name="v14_actuator_speed_droop_per_rad_s" value="0.055"/>
   <xacro:property name="v14_actuator_min_speed_gain" value="0.55"/>
 
-  <xacro:macro name="ros2control" params="name backend='sim' serial_port='/dev/wheelbipe_h7' baudrate='2000000' serial_reconnect_interval_ms='1000' state_timeout_ms='100'">
+  <xacro:macro name="ros2control" params="name sim_profile='deployment' backend='sim' serial_port='/dev/wheelbipe_h7' baudrate='2000000' serial_reconnect_interval_ms='1000' state_timeout_ms='100'">
     <ros2_control name="${name}" type="system">
       <hardware>
         <xacro:if value="${backend == 'sim'}">
           <plugin>mujoco_ros2_control/MujocoSystem</plugin>
           <param name="gas_spring_model_enabled">true</param>
-          <param name="gas_spring_q_min">-0.005</param>
-          <param name="gas_spring_q_max">0.07</param>
-          <param name="gas_spring_force_at_q_min">650.0</param>
-          <param name="gas_spring_force_at_q_max">450.0</param>
+          <param name="gas_spring_q_min">${-0.015 if sim_profile == 'source_v14' else -0.005}</param>
+          <param name="gas_spring_q_max">${0.06076 if sim_profile == 'source_v14' else 0.07}</param>
+          <param name="gas_spring_force_at_q_min">${616.457142857143 if sim_profile == 'source_v14' else 650.0}</param>
+          <param name="gas_spring_force_at_q_max">${400.0 if sim_profile == 'source_v14' else 450.0}</param>
           <param name="gas_spring_manual_passive_enabled">true</param>
-          <param name="gas_spring_manual_viscous_damping">500.0</param>
+          <param name="gas_spring_manual_viscous_damping">${50.0 if sim_profile == 'source_v14' else 500.0}</param>
           <param name="gas_spring_manual_static_friction">0.0</param>
           <param name="gas_spring_manual_velocity_epsilon">0.01</param>
         </xacro:if>
@@ -39,7 +39,7 @@
       </hardware>
 
       <joint name="left_front1_joint">
-        <param name="actuator_model_enabled">${v14_actuator_model_enabled}</param>
+        <param name="actuator_model_enabled">${v14_actuator_model_enabled and sim_profile != 'source_v14'}</param>
         <param name="actuator_time_constant_s">${v14_actuator_time_constant_s}</param>
         <param name="actuator_transport_delay_s">${v14_actuator_transport_delay_s}</param>
         <param name="actuator_dc_gain">${v14_actuator_dc_gain}</param>
@@ -61,7 +61,7 @@
       </joint>
 
       <joint name="left_rear1_joint">
-        <param name="actuator_model_enabled">${v14_actuator_model_enabled}</param>
+        <param name="actuator_model_enabled">${v14_actuator_model_enabled and sim_profile != 'source_v14'}</param>
         <param name="actuator_time_constant_s">${v14_actuator_time_constant_s}</param>
         <param name="actuator_transport_delay_s">${v14_actuator_transport_delay_s}</param>
         <param name="actuator_dc_gain">${v14_actuator_dc_gain}</param>
@@ -83,7 +83,7 @@
       </joint>
 
       <joint name="right_front1_joint">
-        <param name="actuator_model_enabled">${v14_actuator_model_enabled}</param>
+        <param name="actuator_model_enabled">${v14_actuator_model_enabled and sim_profile != 'source_v14'}</param>
         <param name="actuator_time_constant_s">${v14_actuator_time_constant_s}</param>
         <param name="actuator_transport_delay_s">${v14_actuator_transport_delay_s}</param>
         <param name="actuator_dc_gain">${v14_actuator_dc_gain}</param>
@@ -105,7 +105,7 @@
       </joint>
 
       <joint name="right_rear1_joint">
-        <param name="actuator_model_enabled">${v14_actuator_model_enabled}</param>
+        <param name="actuator_model_enabled">${v14_actuator_model_enabled and sim_profile != 'source_v14'}</param>
         <param name="actuator_time_constant_s">${v14_actuator_time_constant_s}</param>
         <param name="actuator_transport_delay_s">${v14_actuator_transport_delay_s}</param>
         <param name="actuator_dc_gain">${v14_actuator_dc_gain}</param>

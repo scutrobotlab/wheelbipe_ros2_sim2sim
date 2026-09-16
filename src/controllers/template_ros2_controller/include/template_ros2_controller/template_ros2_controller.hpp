@@ -124,6 +124,10 @@ class TemplateRos2Controller : public controller_interface::ControllerInterface 
   rclcpp::Time last_update_time_;
   bool rl_inference_ready_ = false;
   bool auto_enter_rl_pending_ = false;
+  // An automatic start goes through PREPARE first so the MuJoCo/real robot has
+  // time to settle before the learned controller receives its first sample.
+  bool auto_prepare_to_rl_pending_ = false;
+  std::uint64_t auto_prepare_deadline_ns_ = 0;
 
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr motion_cmd_subscriber_;
   rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr height_cmd_subscriber_;

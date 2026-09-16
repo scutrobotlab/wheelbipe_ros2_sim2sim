@@ -23,6 +23,10 @@
 namespace robot_locomotion {
 namespace {
 
+// Keep the automatic startup sequence deterministic and give the passive
+// mechanics/leg PD loop time to settle before enabling the policy.
+constexpr std::uint64_t kAutoPrepareDurationNs = 2'000'000'000ULL;
+
 double finiteOrZero(double value) { return std::isfinite(value) ? value : 0.0; }
 
 double nonnegativeFinite(double value) {
@@ -538,8 +542,24 @@ controller_interface::return_type TemplateRos2Controller::update(const rclcpp::T
   }
   if (auto_enter_rl_pending_ && rl_inference_ready_ &&
       state_machine_->getCurrentState() != ControllerState::INIT) {
-    state_machine_->setTargetState(ControllerState::RL);
+    // The policy was trained from a settled reset pose.  Going directly from
+    // IDLE to RL makes MuJoCo start-up (and real hardware bring-up) sensitive
+    // to the few milliseconds of free fall before the first action.  Use the
+    // same explicit PREPARE state as the keyboard workflow, then enter RL.
+    state_machine_->setTargetState(ControllerState::PREPARE);
     auto_enter_rl_pending_ = false;
+    auto_prepare_to_rl_pending_ = true;
+    auto_prepare_deadline_ns_ =
+        time.nanoseconds() > 0
+            ? static_cast<std::uint64_t>(time.nanoseconds()) + kAutoPrepareDurationNs
+            : kAutoPrepareDurationNs;
+  }
+  if (auto_prepare_to_rl_pending_ &&
+      state_machine_->getCurrentState() == ControllerState::PREPARE &&
+      time.nanoseconds() >= static_cast<std::int64_t>(auto_prepare_deadline_ns_)) {
+    state_machine_->setTargetState(ControllerState::RL);
+    auto_prepare_to_rl_pending_ = false;
+    auto_prepare_deadline_ns_ = 0;
   }
   state_machine_->update(robot_state_, time, period);
   const ControllerState state = state_machine_->getCurrentState();
@@ -809,6 +829,8 @@ void TemplateRos2Controller::resetControllerRuntime(const rclcpp::Time& time) {
     state_machine_->reset(robot_state_, time);
   }
   auto_enter_rl_pending_ = params_.auto_enter_rl;
+  auto_prepare_to_rl_pending_ = false;
+  auto_prepare_deadline_ns_ = 0;
   dt7_previous_state_ = -1;
   {
     std::lock_guard<std::mutex> lock(motion_cmd_mutex_);
@@ -894,6 +916,10 @@ void TemplateRos2Controller::stateCommandCallback(const std_msgs::msg::Int32::Sh
                 "Invalid state command %d (use 0=INIT, 1=IDLE, 2=PREPARE, 3=RL)", message->data);
     return;
   }
+  // A user-issued state command takes precedence over an automatic startup
+  // sequence (for example, pressing IDLE/ RL from the keyboard).
+  auto_prepare_to_rl_pending_ = false;
+  auto_prepare_deadline_ns_ = 0;
   state_machine_->setTargetState(target);
 }
 

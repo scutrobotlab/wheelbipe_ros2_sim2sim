@@ -21,6 +21,7 @@
 #include "mujoco_ros2_control/mujoco_rendering.hpp"
 
 #include <cstdio>
+#include <algorithm>
 
 namespace mujoco_ros2_control {
 
@@ -54,12 +55,16 @@ void MujocoRendering::init(mjModel* mujoco_model, mjData* mujoco_data) {
   // create window, make OpenGL context current, request v-sync
   glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
   glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
-  window_ = glfwCreateWindow(1200, 900, "Demo", NULL, NULL);
+  glfwWindowHint(GLFW_SAMPLES, 4);
+  window_ = glfwCreateWindow(1200, 900, "Wheelbipe Sim2Sim", NULL, NULL);
   glfwMakeContextCurrent(window_);
 
   // initialize visualization data structures
   mjv_defaultCamera(&mjv_cam_);
   mjv_defaultOption(&mjv_opt_);
+  // Group 1 is the robot's collision proxy; draw its detailed visual meshes
+  // (group 2) without overlapping proxy geometry.
+  mjv_opt_.geomgroup[1] = 0;
   mjv_defaultScene(&mjv_scn_);
   mjr_defaultContext(&mjr_con_);
 
@@ -95,6 +100,12 @@ bool MujocoRendering::consume_reset_request() {
 }
 
 void MujocoRendering::update() {
+  // Read actual key states, including releases, before the next physics frame.
+  glfwPollEvents();
+  publish_keyboard_motion();
+  if (follow_robot_ && base_body_id_ >= 0) {
+    mju_copy3(mjv_cam_.lookat, mj_data_->xpos + 3 * base_body_id_);
+  }
   // get framebuffer viewport
   mjrRect viewport = {0, 0, 0, 0};
   glfwGetFramebufferSize(window_, &viewport.width, &viewport.height);
@@ -108,6 +119,13 @@ void MujocoRendering::update() {
   mjr_render(viewport, &mjv_scn_, &mjr_con_);
   draw_control_buttons(viewport);
   draw_base_height_overlay(viewport);
+  if (motion_callback_) {
+    char values[96];
+    std::snprintf(values, sizeof(values), "0.8 m/s | Shift: 2.5 m/s | height %.2f m", command_height_);
+    mjr_overlay(mjFONT_NORMAL, mjGRID_BOTTOMLEFT, viewport,
+                "Hold W/S: forward/back | A/D: turn | Release: stop\n"
+                "T/G: height | F: follow camera | Unfocus: stop", values, &mjr_con_);
+  }
 
   // swap OpenGL buffers (blocking call due to v-sync)
   glfwSwapBuffers(window_);
@@ -117,6 +135,7 @@ void MujocoRendering::update() {
 }
 
 void MujocoRendering::close() {
+  if (motion_callback_) motion_callback_(0.0, 0.0, command_height_);
   // free visualization storage
   mjv_freeScene(&mjv_scn_);
   mjr_freeContext(&mjr_con_);
@@ -203,7 +222,28 @@ bool MujocoRendering::handle_control_button_click(GLFWwindow* window, double xpo
   return false;
 }
 
-void MujocoRendering::request_reset() { reset_requested_ = true; }
+void MujocoRendering::set_motion_callback(
+    std::function<void(double, double, double)> callback) {
+  motion_callback_ = std::move(callback);
+}
+
+void MujocoRendering::publish_keyboard_motion() {
+  if (!motion_callback_) return;
+  double forward = 0.0;
+  double yaw = 0.0;
+  if (!paused_ && !reset_requested_ && glfwGetWindowAttrib(window_, GLFW_FOCUSED)) {
+    const auto held = [&](int key) { return glfwGetKey(window_, key) == GLFW_PRESS; };
+    const double speed = held(GLFW_KEY_LEFT_SHIFT) || held(GLFW_KEY_RIGHT_SHIFT) ? 2.5 : 0.8;
+    forward = speed * (int(held(GLFW_KEY_W)) - int(held(GLFW_KEY_S)));
+    yaw = 1.2 * (int(held(GLFW_KEY_A)) - int(held(GLFW_KEY_D)));
+  }
+  motion_callback_(forward, yaw, command_height_);
+}
+
+void MujocoRendering::request_reset() {
+  reset_requested_ = true;
+  if (motion_callback_) motion_callback_(0.0, 0.0, command_height_);
+}
 
 void MujocoRendering::toggle_pause() { paused_ = !paused_; }
 
@@ -231,14 +271,17 @@ void MujocoRendering::keyboard_callback_impl(GLFWwindow* /* window */, int key, 
   }
 
   if (key == GLFW_KEY_SPACE) {
-    toggle_pause();
+    if (act == GLFW_PRESS) toggle_pause();
     return;
   }
 
   if (key == GLFW_KEY_BACKSPACE) {
-    request_reset();
+    if (act == GLFW_PRESS) request_reset();
     return;
   }
+  if (key == GLFW_KEY_F && act == GLFW_PRESS) follow_robot_ = !follow_robot_;
+  if (key == GLFW_KEY_T) command_height_ = std::min(0.40, command_height_ + 0.01);
+  if (key == GLFW_KEY_G) command_height_ = std::max(0.20, command_height_ - 0.01);
 }
 
 void MujocoRendering::mouse_button_callback_impl(GLFWwindow* window, int button, int act,

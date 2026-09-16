@@ -29,6 +29,17 @@
 ./scripts/demo.sh
 ```
 
+Ubuntu 24.04 等没有原生 Humble 二进制包的宿主机，可以使用仓库提供的
+RoboStack 环境（需要已有 conda）：
+
+```bash
+conda env create -f environment-humble.yml
+conda activate wheelbipe_humble
+./scripts/bootstrap.sh --skip-rosdep
+./scripts/build.sh
+./scripts/demo.sh
+```
+
 无界面运行 10 秒：
 
 ```bash
@@ -51,10 +62,19 @@ Xbox 控制：
 ./scripts/demo.sh --xbox
 ```
 
-键盘控制需要两个终端。第一个终端保持仿真运行：
+仿真窗口现在直接支持按住方向键移动，无需另开键盘终端：
+
+- `W/S`：前进/后退（0.8 m/s）；`A/D`：左转/右转（1.2 rad/s），可组合按键。
+- 松开对应按键，其速度命令立即清零；相反方向同时按下互相抵消。切走窗口也清零。
+- 按住 `Shift` + `W/S` 使用 2.5 m/s；`T/G` 调整高度，默认 0.40 m。
+- `Space` 暂停/继续，`Backspace` 回出生点，`F` 切换相机跟随。
+- 鼠标左键拖动旋转视角、右键拖动平移、滚轮缩放。
+
+速度清零指控制命令归零，机器人仍会经历制动和平衡过程。
+使用外部键盘节点时需关闭窗口发布器，避免两个输入源相互覆盖：
 
 ```bash
-./scripts/demo.sh
+./scripts/demo.sh --no-viewer-keyboard
 ```
 
 第二个终端执行：
@@ -66,6 +86,46 @@ ros2 run keyboard_teleop keyboard_teleop_node --ros-args \
 ```
 
 `0/1/2/3` 切换 INIT/IDLE/PREPARE/RL，`w/s` 控制前进速度，`a/d` 控制偏航角速度，`t/g` 调整高度。
+
+### RMUC2026 地图
+
+新克隆仓库需要先按下文离线转换原始 STL 并安装地图资源；生成网格不随 Git 分发。
+
+```bash
+conda activate wheelbipe_humble
+./scripts/demo_rmuc.sh
+```
+
+默认载入本机导出的 `UniLab-V14-35-rough-ros2-motion-stop200.onnx`，在仿真窗口内按住 WASD
+操作。先等待机器人进入 RL，再移动。该配置使用 source_v14 机器人；200 mm 验收场景
+仍可通过 `./scripts/demo_step200.sh` 启动。Xbox 模式会自动关闭窗口键盘发布。
+
+地图默认模型已针对停止、倒退重新训练：原 gpu598 在零命令下仍约 1.1 m/s 前进，
+不能用来判断键盘是否正常。新 motion-stop200 的实测零速残余约 0.03–0.04 m/s，
+倒退命令 -0.8 m/s 时实际约 -0.56 m/s；它不是位置锁定控制器，仍有慢漂移。
+新模型尚未通过 200 mm 竖直台阶验收，不能把旧模型的越障结果算到新模型上。
+若终端曾导出旧的 `WHEELBIPE_RL_MODEL_PATH`，可使用
+`env -u WHEELBIPE_RL_MODEL_PATH ./scripts/demo_rmuc.sh` 明确启用新的默认模型。
+
+地图来自 `/home/gx/RMUC2026-0915.STL`，按毫米转米，平面大小约 29.15 × 16.05 m。
+主要地面移到 z=0，出生点约 (-12.316, -2.748, 0.38)，面向 +X。
+显示保留原 STL 全部 1,734,280 个三角面，只分块加载，不减面、不平滑或删除细节。
+机器人仅显示精细网格，隐藏重叠的碰撞代理，避免影响观感。
+碰撞采用从原始 STL 采样的约 20 mm 高度场。
+这是上表面近似：竖直边缘有约一个网格的过渡，桥下、悬空结构下方和隧道不能准确通行，
+不应用此场景代替精确竖直台阶验收。地图仅用于仿真，不表示策略已通过全地图越障测试。
+
+地图转换发生在离线阶段；修改源 STL 后重新生成并安装资源：
+
+```bash
+uv run --no-project --with trimesh --with scipy python \
+  src/resources/robot_descriptions/tools/import_rmuc_terrain.py /home/gx/RMUC2026-0915.STL
+source setup_ros_base.bash
+colcon build --packages-select robot_descriptions
+```
+
+转换参数、源文件 SHA256 和出生点净空保存在
+`src/resources/robot_descriptions/wheelbipeV14_2/mjcf/terrain_rmuc2026/metadata.json`。
 
 依赖安装、离线部署和故障处理见 [DEPLOY.md](DEPLOY.md)；35D 索引、动作语义和所有公开参数见 [PARAMETERS.md](PARAMETERS.md)。
 
@@ -123,3 +183,10 @@ If you find this project useful in your research, please consider citing:
   year = {2026}
 }
 ```
+
+### 200 mm 源策略越障复现
+
+已移除场景中的三个低矮障碍。200 mm 垂直台阶的源策略验证使用
+`./scripts/demo_step200.sh`，并以 0.40 m 高度命令、2.5 m/s 速度从 2.7 m 外直线接近。
+模型、双终端启动命令、键鼠操作、原生 ROS2 验收记录与物理转换边界见
+[200 mm 复现说明](artifacts/step200_restore_20260916/README.md)。

@@ -11,6 +11,7 @@ import os
 import subprocess
 import tempfile
 
+import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import (
@@ -25,7 +26,6 @@ from launch.events import Shutdown
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-import yaml
 
 
 def _parse_bool(value, name):
@@ -34,16 +34,12 @@ def _parse_bool(value, name):
         return True
     if normalized in ("0", "false", "no", "off"):
         return False
-    raise RuntimeError(
-        f"{name} must be one of true/false, yes/no, on/off, or 1/0; got {value!r}"
-    )
+    raise RuntimeError(f"{name} must be one of true/false, yes/no, on/off, or 1/0; got {value!r}")
 
 
 def _default_controller_parameter_definition():
     share_directory = get_package_share_directory("template_ros2_controller")
-    workspace_directory = os.path.abspath(
-        os.path.join(share_directory, "..", "..", "..", "..")
-    )
+    workspace_directory = os.path.abspath(os.path.join(share_directory, "..", "..", "..", ".."))
     source_path = os.path.join(
         workspace_directory,
         "src",
@@ -54,9 +50,7 @@ def _default_controller_parameter_definition():
     )
     if os.path.isfile(source_path):
         return source_path
-    return os.path.join(
-        share_directory, "config", "template_ros2_controller_parameters.yaml"
-    )
+    return os.path.join(share_directory, "config", "template_ros2_controller_parameters.yaml")
 
 
 def _normalize_default_value(specification):
@@ -92,9 +86,7 @@ def _resolve_policy_path(value):
         return value
 
     controller_share = get_package_share_directory("template_ros2_controller")
-    workspace_directory = os.path.abspath(
-        os.path.join(controller_share, "..", "..", "..", "..")
-    )
+    workspace_directory = os.path.abspath(os.path.join(controller_share, "..", "..", "..", ".."))
     source_marker = "src/controllers/template_ros2_controller/"
     relative_path = value.split(source_marker, 1)[-1] if source_marker in value else value
     for candidate in (
@@ -112,7 +104,7 @@ def _resolve_policy_path(value):
     raise RuntimeError(f"Unable to resolve baseline policy path: {value}")
 
 
-def _make_runtime_parameter_file(definition_path, auto_enter_rl, use_dt7):
+def _make_runtime_parameter_file(definition_path, auto_enter_rl, use_dt7, sim_profile="deployment"):
     if not os.path.isfile(definition_path):
         raise RuntimeError(f"Controller parameter definition is missing: {definition_path}")
 
@@ -129,6 +121,15 @@ def _make_runtime_parameter_file(definition_path, auto_enter_rl, use_dt7):
         runtime_parameters[name] = value
     runtime_parameters["auto_enter_rl"] = auto_enter_rl
     runtime_parameters["use_dt7"] = use_dt7
+
+    if sim_profile == "source_v14":
+        profile_path = os.path.join(
+            get_package_share_directory("template_middleware"),
+            "config",
+            "wheelbipe_source_v14.yaml",
+        )
+        with open(profile_path, encoding="utf-8") as profile_file:
+            runtime_parameters.update(yaml.safe_load(profile_file))
 
     generated = {
         "/**": {
@@ -152,15 +153,16 @@ def launch_setup(context, *args, **kwargs):
     backend = LaunchConfiguration("backend").perform(context).strip().lower()
     if backend not in ("sim", "real"):
         raise RuntimeError(f"backend must be 'sim' or 'real'; got {backend!r}")
+    sim_profile = LaunchConfiguration("sim_profile").perform(context)
+    if sim_profile not in ("deployment", "source_v14"):
+        raise RuntimeError(f"Unknown sim_profile: {sim_profile}")
+    if backend != "sim" and sim_profile != "deployment":
+        raise RuntimeError("source_v14 is a simulation-only profile")
     auto_enter_rl = _parse_bool(
         LaunchConfiguration("auto_enter_rl").perform(context), "auto_enter_rl"
     )
-    xbox_enabled = _parse_bool(
-        LaunchConfiguration("xbox").perform(context), "xbox"
-    )
-    use_dt7 = _parse_bool(
-        LaunchConfiguration("use_dt7").perform(context), "use_dt7"
-    )
+    xbox_enabled = _parse_bool(LaunchConfiguration("xbox").perform(context), "xbox")
+    use_dt7 = _parse_bool(LaunchConfiguration("use_dt7").perform(context), "use_dt7")
     if backend != "real" and use_dt7:
         raise RuntimeError("use_dt7=true requires backend=real")
     definition_path = LaunchConfiguration("controller_params").perform(context)
@@ -170,6 +172,7 @@ def launch_setup(context, *args, **kwargs):
         definition_path,
         auto_enter_rl,
         use_dt7,
+        sim_profile,
     )
 
     controller_config = os.path.join(
@@ -217,6 +220,9 @@ def launch_setup(context, *args, **kwargs):
                 launch_arguments={
                     "prefix": prefix,
                     "controller_config": controller_config,
+                    "sim_profile": sim_profile,
+                    "terrain": LaunchConfiguration("terrain"),
+                    "viewer_keyboard": LaunchConfiguration("viewer_keyboard"),
                     "render": LaunchConfiguration("render"),
                     "run_duration": LaunchConfiguration("run_duration"),
                 }.items(),
@@ -280,11 +286,7 @@ def launch_setup(context, *args, **kwargs):
                 RegisterEventHandler(
                     OnProcessExit(
                         target_action=control_node,
-                        on_exit=[
-                            EmitEvent(
-                                event=Shutdown(reason="real ros2_control node exited")
-                            )
-                        ],
+                        on_exit=[EmitEvent(event=Shutdown(reason="real ros2_control node exited"))],
                     )
                 ),
             ]
@@ -320,9 +322,7 @@ def launch_setup(context, *args, **kwargs):
 
     launch_items.append(
         RegisterEventHandler(
-            OnShutdown(
-                on_shutdown=[OpaqueFunction(function=remove_runtime_parameter_file)]
-            )
+            OnShutdown(on_shutdown=[OpaqueFunction(function=remove_runtime_parameter_file)])
         )
     )
     return launch_items
@@ -398,6 +398,9 @@ def generate_launch_description():
                 default_value="100",
                 description="Age at which H7 state is stale and command output is inhibited.",
             ),
+            DeclareLaunchArgument("sim_profile", default_value="deployment"),
+            DeclareLaunchArgument("terrain", default_value="default"),
+            DeclareLaunchArgument("viewer_keyboard", default_value="true"),
             OpaqueFunction(function=launch_setup),
         ]
     )

@@ -30,9 +30,7 @@ done
 
 set +u
 # shellcheck disable=SC1091
-source /opt/ros/humble/setup.bash
-# shellcheck disable=SC1091
-source "${repository_root}/setup_mujoco_env.bash"
+source "${repository_root}/setup_ros_base.bash"
 set -u
 
 cmake_args=(

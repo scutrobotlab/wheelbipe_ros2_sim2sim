@@ -20,10 +20,16 @@ else
   failed=1
 fi
 
-if [[ -f /opt/ros/humble/setup.bash ]]; then
-  echo "[OK] ROS 2 Humble"
+if [[ "${ROS_DISTRO:-}" == "humble" ]] && command -v ros2 >/dev/null 2>&1; then
+  if [[ -n "${CONDA_PREFIX:-}" && "$(command -v ros2)" == "${CONDA_PREFIX}/bin/ros2" ]]; then
+    echo "[OK] ROS 2 Humble (conda: ${CONDA_PREFIX})"
+  else
+    echo "[OK] ROS 2 Humble (active environment)"
+  fi
+elif [[ -f /opt/ros/humble/setup.bash ]]; then
+  echo "[OK] ROS 2 Humble (/opt/ros/humble)"
 else
-  echo "[MISSING] /opt/ros/humble/setup.bash" >&2
+  echo "[MISSING] ROS 2 Humble (native or active conda environment)" >&2
   failed=1
 fi
 

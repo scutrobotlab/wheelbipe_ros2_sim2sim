@@ -116,7 +116,10 @@ if(WHEELBIPE_INSTALL_POLICIES)
     DESTINATION share/${PROJECT_NAME}/policy
   )
   install(
-    FILES policy/parallel/V14-35-flat-and-rotation-13k.onnx
+    FILES
+      policy/parallel/V14-35-flat-and-rotation-13k.onnx
+      policy/parallel/V14-35-flat-v2-guides-100.onnx
+      policy/parallel/V14-35-flat-v2-guides-500.onnx
     DESTINATION share/${PROJECT_NAME}/policy/parallel
   )
 endif()

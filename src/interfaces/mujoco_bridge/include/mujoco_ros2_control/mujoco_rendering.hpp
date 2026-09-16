@@ -23,6 +23,7 @@
 
 #include "GLFW/glfw3.h"
 #include "mujoco/mujoco.h"
+#include <functional>
 
 namespace mujoco_ros2_control {
 
@@ -38,6 +39,7 @@ class MujocoRendering {
   bool consume_reset_request();
   void update();
   void close();
+  void set_motion_callback(std::function<void(double, double, double)> callback);
 
  private:
   MujocoRendering();
@@ -55,6 +57,7 @@ class MujocoRendering {
   bool handle_control_button_click(GLFWwindow* window, double xpos, double ypos);
   void request_reset();
   void toggle_pause();
+  void publish_keyboard_motion();
 
   static MujocoRendering* instance_;
 
@@ -79,6 +82,9 @@ class MujocoRendering {
   int base_body_id_;
   double lastx_;
   double lasty_;
+  std::function<void(double, double, double)> motion_callback_;
+  double command_height_ = 0.40;
+  bool follow_robot_ = true;
 };
 }  // namespace mujoco_ros2_control
 

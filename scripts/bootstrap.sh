@@ -177,18 +177,18 @@ if [[ ! -f "${onnxruntime_dir}/lib/libonnxruntime.so" ]]; then
 fi
 
 if [[ "${install_ros_dependencies}" == true ]]; then
-  [[ -f /opt/ros/humble/setup.bash ]] || {
+  set +u
+  # shellcheck disable=SC1091
+  source "${repository_root}/setup_ros_base.bash" || {
+    set -u
     echo "ROS 2 Humble is required before bootstrap; see DEPLOY.md." >&2
     exit 1
   }
+  set -u
   command -v rosdep >/dev/null 2>&1 || {
     echo "rosdep is required; install python3-rosdep and initialize it first." >&2
     exit 1
   }
-  set +u
-  # shellcheck disable=SC1091
-  source /opt/ros/humble/setup.bash
-  set -u
   if ! rosdep check --from-paths "${repository_root}/src" --ignore-src \
     --rosdistro humble >/dev/null 2>&1; then
     echo "[bootstrap] installing missing ROS and system dependencies with rosdep"

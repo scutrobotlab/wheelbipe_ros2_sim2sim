@@ -35,7 +35,9 @@ install(
 install(
   FILES
     wheelbipeV14_2/mjcf/scene.xml
+    wheelbipeV14_2/mjcf/scene_source.xml
     wheelbipeV14_2/mjcf/wheelbipeV14_2.xml
+    wheelbipeV14_2/mjcf/wheelbipeV14_2_source.xml
   DESTINATION share/${PROJECT_NAME}/wheelbipeV14_2/mjcf
 )
 
@@ -47,5 +49,15 @@ install(
     wheelbipe_V14/xacro/ros2control.xacro
   DESTINATION share/${PROJECT_NAME}/wheelbipe_V14/xacro
 )
+
+# The user-provided CAD map is compiled offline; robot-only builds do not
+# require the private source STL. Install the map when it has been generated.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/wheelbipeV14_2/mjcf/scene_rmuc2026.xml")
+  install(FILES wheelbipeV14_2/mjcf/scene_rmuc2026.xml
+    DESTINATION share/${PROJECT_NAME}/wheelbipeV14_2/mjcf)
+  install(DIRECTORY wheelbipeV14_2/mjcf/terrain_rmuc2026
+    DESTINATION share/${PROJECT_NAME}/wheelbipeV14_2/mjcf
+    PATTERN "*.npy" EXCLUDE)
+endif()
 
 ament_package()
