@@ -121,10 +121,11 @@ void MujocoRendering::update() {
   draw_base_height_overlay(viewport);
   if (motion_callback_) {
     char values[96];
-    std::snprintf(values, sizeof(values), "0.8 m/s | Shift: 2.5 m/s | height %.2f m", command_height_);
+    std::snprintf(values, sizeof(values), "Speed %.1f m/s | height %.2f m",
+                  command_speed_tenths_ * 0.1, command_height_);
     mjr_overlay(mjFONT_NORMAL, mjGRID_BOTTOMLEFT, viewport,
                 "Hold W/S: forward/back | A/D: turn | Release: stop\n"
-                "T/G: height | F: follow camera | Unfocus: stop", values, &mjr_con_);
+                "Up/Down: speed +/-0.1 | T/G: height | F: follow | Unfocus: stop", values, &mjr_con_);
   }
 
   // swap OpenGL buffers (blocking call due to v-sync)
@@ -233,7 +234,7 @@ void MujocoRendering::publish_keyboard_motion() {
   double yaw = 0.0;
   if (!paused_ && !reset_requested_ && glfwGetWindowAttrib(window_, GLFW_FOCUSED)) {
     const auto held = [&](int key) { return glfwGetKey(window_, key) == GLFW_PRESS; };
-    const double speed = held(GLFW_KEY_LEFT_SHIFT) || held(GLFW_KEY_RIGHT_SHIFT) ? 2.5 : 0.8;
+    const double speed = command_speed_tenths_ * 0.1;
     forward = speed * (int(held(GLFW_KEY_W)) - int(held(GLFW_KEY_S)));
     yaw = 1.2 * (int(held(GLFW_KEY_A)) - int(held(GLFW_KEY_D)));
   }
@@ -277,6 +278,14 @@ void MujocoRendering::keyboard_callback_impl(GLFWwindow* /* window */, int key, 
 
   if (key == GLFW_KEY_BACKSPACE) {
     if (act == GLFW_PRESS) request_reset();
+    return;
+  }
+  // Ignore OS key repeat: each distinct press selects exactly one speed step.
+  if (key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) {
+    if (act == GLFW_PRESS) {
+      command_speed_tenths_ = std::clamp(
+          command_speed_tenths_ + (key == GLFW_KEY_UP ? 1 : -1), 0, 25);
+    }
     return;
   }
   if (key == GLFW_KEY_F && act == GLFW_PRESS) follow_robot_ = !follow_robot_;

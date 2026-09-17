@@ -64,9 +64,9 @@ Xbox 控制：
 
 仿真窗口现在直接支持按住方向键移动，无需另开键盘终端：
 
-- `W/S`：前进/后退（0.8 m/s）；`A/D`：左转/右转（1.2 rad/s），可组合按键。
+- `W/S`：前进/后退（使用当前速度档，默认 0.8 m/s）；`A/D`：左转/右转（1.2 rad/s），可组合按键。
 - 松开对应按键，其速度命令立即清零；相反方向同时按下互相抵消。切走窗口也清零。
-- 按住 `Shift` + `W/S` 使用 2.5 m/s；`T/G` 调整高度，默认 0.40 m。
+- 每按一次 `↑/↓` 将速度档增加/减少 0.1 m/s，范围 0–2.5 m/s，窗口显示当前速度；长按不会连续变档。`T/G` 调整高度，默认 0.40 m。
 - `Space` 暂停/继续，`Backspace` 回出生点，`F` 切换相机跟随。
 - 鼠标左键拖动旋转视角、右键拖动平移、滚轮缩放。
 
@@ -183,6 +183,21 @@ If you find this project useful in your research, please consider citing:
   year = {2026}
 }
 ```
+
+### UniLab 长训练最终模型
+
+2026-09-17 完成追加 10,000 轮训练，最终检查点为 `model_10199.pt`。
+随仓库提供 `UniLab-V14-35-rough-ros2-long10199.onnx`，可显式选择：
+
+```bash
+WHEELBIPE_RL_MODEL_PATH="$PWD/src/controllers/template_ros2_controller/policy/parallel/UniLab-V14-35-rough-ros2-long10199.onnx" \
+./scripts/demo_rmuc.sh
+```
+
+导出为 35D 输入、6D 输出；128 组普通模式输入与 TorchScript 的最大绝对差为
+6.68e-6。该最终模型尚未完成原生 ROS2 停车、倒退和 200 mm 越障联合验收，
+因此不改变 `demo_rmuc.sh` 的默认模型。模型 SHA256：
+`f42eeb637bf6faa8ac61866973c2f82c20624a7797097ee5871a18a0059c3957`。
 
 ### 200 mm 源策略越障复现
 

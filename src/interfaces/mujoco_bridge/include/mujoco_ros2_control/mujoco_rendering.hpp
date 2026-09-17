@@ -83,6 +83,7 @@ class MujocoRendering {
   double lastx_;
   double lasty_;
   std::function<void(double, double, double)> motion_callback_;
+  int command_speed_tenths_ = 8;  // 0.0–2.5 m/s, one 0.1 m/s step per arrow press.
   double command_height_ = 0.40;
   bool follow_robot_ = true;
 };

@@ -33,3 +33,4 @@ src/resources/robot_descriptions/wheelbipeV14_2/mjcf/terrain_rmuc2026/
 src/resources/robot_descriptions/wheelbipeV14_2/mjcf/tmp*.xml
 !src/controllers/template_ros2_controller/policy/parallel/Source-V14-35-rough-dash-3500.onnx
 !src/controllers/template_ros2_controller/policy/parallel/UniLab-V14-35-rough-ros2-motion-stop200.onnx
+!src/controllers/template_ros2_controller/policy/parallel/UniLab-V14-35-rough-ros2-long10199.onnx
